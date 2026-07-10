@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Cihaz raporu nereden alınır?",
+    "expected_concepts": ["cihaz", "muayene_raporu"]
+  },
+  {
+    "question": "Ekipman ile cihaz aynı şey mi?",
+    "expected_concepts": ["ekipman", "cihaz"]
+  },
+  {
+    "question": "Muayene rapor formatı ile muayene raporu farkı nedir?",
+    "expected_concepts": ["muayene_rapor_formati", "muayene_raporu"]
+  },
+  {
+    "question": "Periyodik kontrol tamamlanınca hangi belge oluşur?",
+    "expected_concepts": ["periyodik_kontrol", "muayene_raporu"]
+  },
+  {
+    "question": "İş emri ne işe yarar?",
+    "expected_concepts": ["is_emri"]
+  },
+  {
+    "question": "Forklift kontrolü hangi hizmete girer?",
+    "expected_concepts": ["muayene_hizmeti", "ekipman", "periyodik_kontrol"]
+  },
+  {
+    "question": "Saha personeli kontrol bilgilerini nereye girer?",
+    "expected_concepts": ["muayene_kontrol_formu"]
+  },
+  {
+    "question": "Rapor şablonu nasıl düzenlenir?",
+    "expected_concepts": ["muayene_rapor_formati"]
+  },
+  {
+    "question": "Test cihazının kalibrasyon bilgisi önemli mi?",
+    "expected_concepts": ["cihaz"]
+  },
+  {
+    "question": "Muayene kapsamı ile hizmet aynı mı?",
+    "expected_concepts": ["muayene_kapsami", "muayene_hizmeti"]
+  }
+]

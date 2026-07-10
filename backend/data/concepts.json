@@ -1,0 +1,104 @@
+{
+  "muayene_kapsami": {
+    "name": "Muayene Kapsamı",
+    "definition": "Muayene kuruluşunun verdiği hizmetlerin üst sınıflandırmasıdır. ISO 17020 kapsamında hangi alanda veya hangi ekipman grubunda muayene yapılacağını ifade eder.",
+    "synonyms": ["kapsam", "muayene kapsamı", "hizmet grubu", "ana hizmet grubu", "akreditasyon kapsamı"],
+    "examples": ["kaldırma iletme ekipmanları", "basınçlı kaplar", "elektrik tesisatı kontrolleri"],
+    "related": ["muayene_hizmeti", "muayene_metodu", "muayene_rapor_formati", "akreditasyon"],
+    "distinguish_from": {
+      "muayene_hizmeti": "Muayene kapsamı üst sınıflandırmadır; muayene hizmeti ise müşteriye sunulan spesifik kontrol türüdür."
+    }
+  },
+  "muayene_hizmeti": {
+    "name": "Muayene Hizmeti",
+    "definition": "Müşteriye sunulan spesifik muayene türüdür. Bir kapsam altında tanımlanır ve hangi ekipmanın hangi kontrol hizmetine tabi tutulacağını belirtir.",
+    "synonyms": ["hizmet", "kontrol hizmeti", "verilen kontrol hizmeti", "muayene türü"],
+    "examples": ["forklift periyodik kontrolü", "vinç periyodik kontrolü", "kompresör periyodik kontrolü", "topraklama ölçümü"],
+    "related": ["muayene_kapsami", "muayene_metodu", "is_emri", "muayene_raporu", "muayene_kontrol_formu", "ekipman"],
+    "distinguish_from": {
+      "muayene_kapsami": "Muayene hizmeti spesifik hizmettir; muayene kapsamı bu hizmetlerin üst grubudur.",
+      "muayene_metodu": "Muayene hizmeti neyin kontrol edileceğini belirtir; muayene metodu kontrolün hangi standarda veya yönteme göre yapılacağını belirtir."
+    }
+  },
+  "muayene_metodu": {
+    "name": "Muayene Metodu",
+    "definition": "Muayenenin hangi standarda, mevzuata, prosedüre, talimata veya teknik yönteme göre yapılacağını belirten tanımdır.",
+    "synonyms": ["metot", "standart", "prosedür", "talimat", "teknik yöntem", "mevzuat", "kontrol yöntemi"],
+    "examples": ["kontrol adımları", "ölçüm yöntemleri", "kabul kriterleri", "değerlendirme esasları"],
+    "related": ["muayene_hizmeti", "muayene_kapsami", "muayene_kontrol_formu"],
+    "distinguish_from": {
+      "muayene_hizmeti": "Muayene hizmeti yapılacak kontrol türüdür; muayene metodu bu kontrolün hangi teknik kurala göre yapılacağını belirler."
+    }
+  },
+  "muayene_rapor_formati": {
+    "name": "Muayene Rapor Formatı",
+    "definition": "Muayene sonucunda oluşturulacak raporun şablonudur. Gerçek raporun kendisi değil; raporun nasıl oluşturulacağını tarif eden taslaktır.",
+    "synonyms": ["muayene rapor şablonu", "rapor formatı", "rapor şablonu", "şablon", "format"],
+    "examples": ["rapor alanları", "tablolar", "ölçüm değerleri", "imza alanları", "logolar", "sonuç bölümleri"],
+    "related": ["muayene_raporu", "muayene_hizmeti", "muayene_kapsami"],
+    "distinguish_from": {
+      "muayene_raporu": "Muayene rapor formatı raporun şablonudur; muayene raporu tamamlanmış muayene için oluşturulan nihai resmi belgedir."
+    }
+  },
+  "muayene_raporu": {
+    "name": "Muayene Raporu",
+    "definition": "Gerçekleştirilen bir muayene işlemine ait resmi çıktı dokümanıdır. Belirli bir müşteri, tesis, ekipman, iş emri ve muayene hizmeti için oluşturulur.",
+    "synonyms": ["rapor", "kontrol raporu", "periyodik kontrol raporu", "muayene çıktısı", "resmi çıktı", "nihai belge"],
+    "examples": ["kontrol sonuçları", "ölçüm değerleri", "uygunsuzluklar", "fotoğraflar", "rapor numarası", "imzalar", "akreditasyon bilgileri"],
+    "related": ["muayene_rapor_formati", "muayene_kontrol_formu", "is_emri", "periyodik_kontrol", "ekipman", "muayene_hizmeti"],
+    "distinguish_from": {
+      "muayene_rapor_formati": "Muayene raporu gerçek çıktı belgesidir; muayene rapor formatı bu belgenin şablonudur.",
+      "muayene_kontrol_formu": "Muayene kontrol formu sahada veri toplamak için kullanılır; muayene raporu bu bilgilerden üretilen resmi sonuç dokümanıdır."
+    }
+  },
+  "muayene_kontrol_formu": {
+    "name": "Muayene Kontrol Formu",
+    "definition": "Muayene sırasında kullanılacak kontrol sorularını, ölçüm alanlarını ve veri giriş ekranlarını içeren formdur.",
+    "synonyms": ["kontrol formu", "muayene formu", "saha formu", "veri giriş formu", "kontrol soruları"],
+    "examples": ["kontrol soruları", "ölçüm alanları", "veri giriş ekranları", "saha kayıtları"],
+    "related": ["muayene_raporu", "periyodik_kontrol", "ekipman", "muayene_hizmeti"],
+    "distinguish_from": {
+      "muayene_raporu": "Kontrol formu operasyonel veri giriş alanıdır; muayene raporu resmi çıktı dokümanıdır."
+    }
+  },
+  "is_emri": {
+    "name": "İş Emri",
+    "definition": "Müşteriden gelen talebin operasyonel olarak planlanmış halidir. Planlama, görevlendirme, saha operasyonu, raporlama ve faturalandırma süreçlerinin başlangıç kaydıdır.",
+    "synonyms": ["iş emri", "iş kaydı", "operasyon kaydı", "talep kaydı", "planlama kaydı"],
+    "examples": ["müşteri", "tesis", "şube", "ekipman", "muayene hizmeti", "görevlendirme", "faturalandırma"],
+    "related": ["muayene_raporu", "muayene_hizmeti", "ekipman", "periyodik_kontrol", "muayene_kontrol_formu"],
+    "distinguish_from": {
+      "muayene_raporu": "İş emri muayene sürecini başlatan operasyon kaydıdır; muayene raporu süreç sonunda oluşan resmi çıktıdır."
+    }
+  },
+  "periyodik_kontrol": {
+    "name": "Periyodik Kontrol",
+    "definition": "İş ekipmanlarının mevzuat, standart veya müşteri gerekliliklerine göre belirli aralıklarla kontrol edilmesi işlemidir.",
+    "synonyms": ["periyodik muayene", "kontrol", "muayene", "periyodik kontrol işlemi"],
+    "examples": ["belirli aralıklarla kontrol", "kontrol formu doldurma", "muayene raporu oluşturma"],
+    "related": ["ekipman", "muayene_kontrol_formu", "muayene_raporu", "muayene_hizmeti", "is_emri"],
+    "distinguish_from": {
+      "muayene_raporu": "Periyodik kontrol yapılan işlemdir; muayene raporu bu işlemin sonucunda oluşan belgedir."
+    }
+  },
+  "ekipman": {
+    "name": "Ekipman",
+    "definition": "Müşteriye ait, muayenesi yapılan iş ekipmanı veya varlıktır. Ekipman, muayenenin konusudur.",
+    "synonyms": ["iş ekipmanı", "kontrol edilen varlık", "varlık", "kontrol edilen nesne"],
+    "examples": ["forklift", "vinç", "kompresör", "basınçlı kap", "kazan", "elektrik panosu", "topraklama hattı"],
+    "related": ["periyodik_kontrol", "muayene_raporu", "is_emri", "muayene_hizmeti", "muayene_kontrol_formu"],
+    "distinguish_from": {
+      "cihaz": "Ekipman kontrol edilen varlıktır; cihaz kontrol sırasında kullanılan ölçüm veya test aracıdır."
+    }
+  },
+  "cihaz": {
+    "name": "Cihaz",
+    "definition": "Muayene sırasında ölçüm veya test yapmak için kullanılan ölçüm cihazıdır. Ekipmandan farklıdır; ekipman kontrol edilen varlık iken cihaz kontrol sırasında kullanılan ölçüm aracıdır.",
+    "synonyms": ["ölçüm cihazı", "test cihazı", "ölçüm aracı", "test aracı", "test aleti"],
+    "examples": ["multimetre", "pens ampermetre", "manometre", "kumpas", "termal kamera", "topraklama ölçüm cihazı"],
+    "related": ["kalibrasyon", "ölçüm", "muayene_metodu", "periyodik_kontrol"],
+    "distinguish_from": {
+      "ekipman": "Cihaz kontrol sırasında kullanılan ölçüm veya test aracıdır; ekipman kontrol edilen varlıktır."
+    }
+  }
+}

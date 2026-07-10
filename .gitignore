@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Vector DB / local data
+backend/data/ingest_registry.json
+backend/data/chroma/
+data/chroma/
+*.sqlite3
+*.db
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
