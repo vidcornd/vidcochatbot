@@ -4,6 +4,8 @@ import fitz
 
 DOCUMENT_TITLES = {
     "17020_temel_ayarlari.pdf": "17020 Muayene Yazılımı Temel Ayarları",
+    "17020_temel_ayarlar_ve_tanimlamalar.pdf": "17020 Temel Ayarlar ve Tanımlamalar (Personel, Cihaz/Kalibrasyon, Muayene Konfigürasyonları, Firma/Şube/Kişi, Kare Kod)",
+    "is_emri_ve_muayene_yonetimi.pdf": "17020 İş Emri ve Muayene Yönetimi",
     "e_imza_sureci_direct.pdf": "E-imza Süreci Direct Kullanım Kılavuzu",
     "firmalar.pdf": "Firmalar",
     "hazir_sablon_ekleme.pdf": "Muayene Raporu Hazır Şablon Ekleme Kılavuzu",

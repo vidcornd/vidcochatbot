@@ -59,7 +59,7 @@ def find_unsupported_exact_concept(chunks: list[dict], concepts: list[dict] | No
 
 def answer_question(question: str,memory_context: str = "",retrieval_query: str | None = None,concept_context: str = "",concepts: list[dict] | None = None) -> dict:
     query_for_retrieval = retrieval_query or question
-    chunks = retrieve_relevant_chunks(query_for_retrieval, k=3)
+    chunks = retrieve_relevant_chunks(query_for_retrieval, k=5)
     confidence = calculate_confidence(chunks)
     if confidence == "low" and (not chunks or not concept_context):
         return {"answer": FALLBACK_ANSWER, "sources": [], "confidence": "low"}

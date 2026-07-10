@@ -12,7 +12,7 @@ class ConceptResolver:
         exact_matches = sorted(exact_matches,key=lambda item: len(item.get("matched_term", "")),reverse=True,)
 
         if len(exact_matches) >= 2:
-            return exact_matches[:top_k]
+            return exact_matches
 
         vector_matches = self.retriever.search(query, top_k=top_k)
 

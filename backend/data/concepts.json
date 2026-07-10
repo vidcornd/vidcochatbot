@@ -79,6 +79,7 @@
     "related": ["ekipman", "muayene_kontrol_formu", "muayene_raporu", "muayene_hizmeti", "is_emri"],
     "distinguish_from": {
       "muayene_raporu": "Periyodik kontrol yapılan işlemdir; muayene raporu bu işlemin sonucunda oluşan belgedir."
+       ,"kalibrasyon": "Periyodik kontrol, muayene edilen ekipmana uygulanan kontroldür; kalibrasyon ise ölçüm cihazının kendi doğruluğunun kontrolüdür."
     }
   },
   "ekipman": {
@@ -99,6 +100,28 @@
     "related": ["kalibrasyon", "ölçüm", "muayene_metodu", "periyodik_kontrol"],
     "distinguish_from": {
       "ekipman": "Cihaz kontrol sırasında kullanılan ölçüm veya test aracıdır; ekipman kontrol edilen varlıktır."
+      ,
+      "e_imza_cihazi": "Cihaz (ölçüm cihazı) muayene sırasında ölçüm/test yapmak için kullanılır; e-imza cihazı ise yalnızca rapor imzalamak için kullanılan ayrı bir donanımdır."
+    }
+  },
+  "e_imza_cihazi": {
+    "name": "E-imza Cihazı",
+    "definition": "Elektronik imza atmak için bilgisayara takılan USB donanımıdır (token). Muayene sırasında ölçüm yapmak için kullanılan ölçüm cihazından tamamen farklıdır; yalnızca rapor imzalama sürecinde kullanılır.",
+    "synonyms": ["e-imza cihazı", "imza cihazı", "e-imza token", "imza aracı", "USB e-imza cihazı", "imza kartı"],
+    "examples": ["e-imza token", "e-imza USB'si"],
+    "related": ["cihaz"],
+    "distinguish_from": {
+      "cihaz": "E-imza cihazı rapor imzalamak için kullanılan bir donanımdır; cihaz (ölçüm cihazı) ise muayene sırasında ölçüm/test yapmak için kullanılır."
+    }
+  },
+  "kalibrasyon": {
+    "name": "Kalibrasyon",
+    "definition": "Ölçüm cihazının kendisinin, belirli bir periyotla doğruluğunun kontrol edilmesi işlemidir. Ekipmanın periyodik kontrolünden farklıdır; kalibrasyon cihaza, periyodik kontrol ekipmana uygulanır.",
+    "synonyms": ["cihaz kalibrasyonu", "kalibrasyon kontrolü", "cihazın periyodik kontrolü", "ölçüm cihazı periyodik kontrolü"],
+    "examples": ["kalibrasyon sertifikası", "kalibrasyon sapma değeri", "son kalibrasyon tarihi"],
+    "related": ["cihaz", "periyodik_kontrol"],
+    "distinguish_from": {
+      "periyodik_kontrol": "Kalibrasyon, ölçüm cihazının kendi doğruluk kontrolüdür; periyodik kontrol ise muayene edilen ekipmanın belirli aralıklarla kontrol edilmesidir."
     }
   }
 }
