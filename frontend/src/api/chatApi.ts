@@ -11,12 +11,13 @@ export type ChatResponse = {
   conversation_id: string;
 };
 
-export async function sendChatMessage(apiUrl: string,conversationId: string,message: string): Promise<ChatResponse> {
+export async function sendChatMessage(apiUrl: string,conversationId: string,message: string,apiKey?: string): Promise<ChatResponse> {
+  const headers: Record<string, string> = {"Content-Type": "application/json"};
+  if (apiKey) headers["X-API-Key"] = apiKey;
+
   const response = await fetch(`${apiUrl}/api/chat`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify({
       conversation_id: conversationId,
       message,

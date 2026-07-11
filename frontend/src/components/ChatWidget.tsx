@@ -12,6 +12,7 @@ type Message = {
 };
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const API_KEY = import.meta.env.VITE_WIDGET_API_KEY || "";
 
 const EXAMPLE_QUESTIONS = [
   "Muayene raporu nasıl hazırlanır?",
@@ -60,7 +61,7 @@ export function ChatWidget() {
     setIsLoading(true);
 
     try {
-      const response = await sendChatMessage(API_URL,conversationId,trimmedInput);
+      const response = await sendChatMessage(API_URL,conversationId,trimmedInput,API_KEY);
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",

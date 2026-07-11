@@ -1,5 +1,5 @@
 import concurrent.futures
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends,HTTPException, Request
 from app.services.rag_service import RagService
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.memory.redis_store import save_message
@@ -7,8 +7,9 @@ from app.memory.summarizer import build_memory_context, summarize_conversation_i
 from app.rag.router import route_message
 from app.api.errors import api_error
 from app.api.rate_limit import (check_rate_limit,build_ip_rate_limit_key,build_conversation_rate_limit_key)
+from app.api.auth import verify_widget_api_key
 
-router = APIRouter(prefix="/api", tags=["chat"])
+router = APIRouter(prefix="/api", tags=["chat"], dependencies=[Depends(verify_widget_api_key)])
 
 rag_service = RagService()
 
