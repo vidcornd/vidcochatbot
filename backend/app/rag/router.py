@@ -4,6 +4,8 @@ from typing import Literal
 from langchain_google_genai import ChatGoogleGenerativeAI
 from app.config import settings
 from app.concepts.matcher import ConceptMatcher
+import logging
+logger = logging.getLogger(__name__)
 
 _concept_matcher = ConceptMatcher()
 
@@ -103,7 +105,7 @@ def extract_json(text: str) -> dict:
     except json.JSONDecodeError:
         return {}
 
-def classify_intent(question: str, memory_context: str = "") -> dict:
+def classify_intent(question: str, memory_context: str = "", request_id: str | None = None) -> dict:
     question_clean = question.strip()
 
     if not question_clean:
@@ -200,9 +202,10 @@ Beklenen JSON formatı:
 
         return {"intent": intent,"smalltalk_response": short_response,"needs_context": needs_context,"reason": reason}
     except Exception:
+        logger.exception("request_id=%s step=classify_intent status=error",request_id)
         return {"intent": "rag_question","smalltalk_response": None,"needs_context": False,"reason": "router_exception_defaulted_to_rag_question"}
 
-def route_message(question: str, memory_context: str) -> dict:
-    route = classify_intent(question, memory_context)
-
+def route_message(question: str, memory_context: str, request_id: str | None = None) -> dict:
+    route = classify_intent(question, memory_context, request_id=request_id)
+    logger.info("request_id=%s step=classify_intent intent=%s reason=%s needs_context=%s",request_id,route["intent"],route["reason"],route.get("needs_context", False))
     return {"intent": route["intent"],"smalltalk_response": route["smalltalk_response"],"needs_context": route.get("needs_context", False),"reason": route["reason"]}

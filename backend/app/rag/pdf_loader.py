@@ -1,6 +1,7 @@
 from pathlib import Path
 import fitz
-
+import logging
+logger = logging.getLogger(__name__)
 
 DOCUMENT_TITLES = {
     "17020_temel_ayarlari.pdf": "17020 Muayene Yazılımı Temel Ayarları",
@@ -30,10 +31,9 @@ def load_all_pdfs(raw_dir: str = "data/raw") -> list[dict]:
     for pdf_file in pdf_files:
         pages = load_pdf(str(pdf_file))
         all_pages.extend(pages)
-        print(f"Loaded {pdf_file.name}: {len(pages)} pages")
-
-    print(f"Total PDF files: {len(pdf_files)}")
-    print(f"Total pages loaded: {len(all_pages)}")
+        logger.info("Loaded %s: %d pages",pdf_file.name,len(pages))
+    logger.info("Total PDF files: %d",len(pdf_files))
+    logger.info("Total pages loaded: %d",len(all_pages))
 
     return all_pages
 

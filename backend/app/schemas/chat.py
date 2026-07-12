@@ -19,3 +19,4 @@ class HealthResponse(BaseModel):
     status: str
     vector_db: str
     redis: str
+    gemini: str

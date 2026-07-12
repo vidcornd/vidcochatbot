@@ -2,6 +2,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from app.config import settings
 from app.rag.prompts import RAG_SYSTEM_PROMPT
 from app.rag.retriever import (retrieve_relevant_chunks,format_context,extract_sources)
+import logging
+logger = logging.getLogger(__name__)
 
 FALLBACK_ANSWER = "Bu bilgi Vidco 17020 kullanım kılavuzlarında açıkça bulunamadı."
 
@@ -57,14 +59,18 @@ def find_unsupported_exact_concept(chunks: list[dict], concepts: list[dict] | No
 
     return None
 
-def answer_question(question: str,memory_context: str = "",retrieval_query: str | None = None,concept_context: str = "",concepts: list[dict] | None = None) -> dict:
+def answer_question(question: str,memory_context: str = "",retrieval_query: str | None = None,concept_context: str = "",concepts: list[dict] | None = None,request_id: str | None = None) -> dict:
     query_for_retrieval = retrieval_query or question
     chunks = retrieve_relevant_chunks(query_for_retrieval, k=5)
     confidence = calculate_confidence(chunks)
+    logger.info("request_id=%s step=retrieve chunks=%d confidence=%s",request_id,len(chunks),confidence)
     if confidence == "low" and (not chunks or not concept_context):
+        logger.info("request_id=%s step=answer outcome=fallback reason=low_confidence",request_id)
         return {"answer": FALLBACK_ANSWER, "sources": [], "confidence": "low"}
 
-    if find_unsupported_exact_concept(chunks, concepts):
+    unsupported_concept = find_unsupported_exact_concept(chunks, concepts)
+    if unsupported_concept:
+        logger.info("request_id=%s step=answer outcome=fallback reason=unsupported_concept concept_id=%s",request_id,unsupported_concept.get("concept_id"))
         return {"answer": FALLBACK_ANSWER, "sources": [], "confidence": "low"}
 
     context = format_context(chunks)
@@ -149,4 +155,5 @@ Teknik parametre sorularında şu formatı kullan:
 
     llm = get_chat_model()
     response = llm.invoke(prompt)
+    logger.info("request_id=%s step=answer outcome=generated confidence=%s sources=%d",request_id,confidence,len(sources))
     return {"answer": response.content, "sources": sources, "confidence": confidence}

@@ -3,6 +3,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+import logging
+logger = logging.getLogger(__name__)
 
 REGISTRY_PATH = Path("data/ingest_registry.json")
 
@@ -45,4 +47,4 @@ def remove_document_record(registry: dict[str, Any],source: str) -> None:
 def reset_registry() -> None:
     if REGISTRY_PATH.exists():
         REGISTRY_PATH.unlink()
-        print(f"Deleted ingest registry: {REGISTRY_PATH}")
+        logger.info("Deleted ingest registry: %s",REGISTRY_PATH)

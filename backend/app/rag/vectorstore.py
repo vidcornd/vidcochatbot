@@ -5,6 +5,8 @@ from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.documents import Document
 from app.config import settings
+import logging
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
@@ -15,14 +17,20 @@ def batch_list(items: list[T], batch_size: int) -> Iterable[list[T]]:
 def get_embeddings():
     return GoogleGenerativeAIEmbeddings(model=settings.embedding_model,google_api_key=settings.google_api_key)
 
-
+def check_gemini_reachable() -> bool:
+    try:
+        get_embeddings().embed_query("ping")
+        return True
+    except Exception as error:
+        logger.warning("Gemini reachability check failed: %s",error)
+        return False
+    
 def reset_chroma():
     chroma_path = Path(settings.chroma_path)
 
     if chroma_path.exists():
         shutil.rmtree(chroma_path)
-        print(f"Deleted existing Chroma directory: {settings.chroma_path}")
-
+        logger.info("Deleted existing Chroma directory: %s",settings.chroma_path)
 
 def get_vectorstore():
     embeddings = get_embeddings()
@@ -33,9 +41,9 @@ def delete_document_chunks(document_id: str) -> None:
     vectorstore = get_vectorstore()
     try:
         vectorstore._collection.delete(where={"document_id": document_id})
-        print(f"Deleted old chunks for document_id: {document_id}")
-    except Exception as error:
-        print(f"Could not delete chunks for document_id={document_id}: {error}")
+        logger.info("Deleted old chunks for document_id: %s",document_id)
+    except Exception:
+        logger.exception("Could not delete chunks for document_id=%s",document_id)
         raise
 
 def ingest_documents(documents, reset: bool = False,batch_size: int = 32):
@@ -50,10 +58,9 @@ def ingest_documents(documents, reset: bool = False,batch_size: int = 32):
 
     for batch_number, batch in enumerate(batch_list(documents, batch_size), start=1):
         vectorstore.add_documents(batch)
-        print(f"Ingested batch {batch_number}: {len(batch)} chunks ({min(batch_number * batch_size, total_documents)}/{total_documents})")
+        logger.info("Ingested batch %d: %d chunks (%d/%d)",batch_number,len(batch),min(batch_number * batch_size, total_documents),total_documents)
 
-    print(f"Ingested chunks: {total_documents}")
-    print(f"Collection: {settings.chroma_collection}")
-    print(f"Persist directory: {settings.chroma_path}")
-
+    logger.info("Ingested chunks: %d",total_documents)
+    logger.info("Collection: %s",settings.chroma_collection)
+    logger.info("Persist directory: %s",settings.chroma_path)
     return vectorstore

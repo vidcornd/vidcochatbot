@@ -8,6 +8,8 @@ from langchain_core.documents import Document
 from app.concepts.formatter import concept_to_text
 from app.config import settings
 from app.rag.vectorstore import get_embeddings
+import logging
+logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 CONCEPTS_PATH = BASE_DIR / "data" / "concepts.json"
@@ -157,12 +159,14 @@ def ingest_concepts() -> None:
         vectorstore = get_concept_vectorstore()
         vectorstore.add_documents(documents=documents_to_upsert,ids=ids_to_upsert)
 
-    print(f"{len(ids_to_upsert)} kavram eklendi/güncellendi.")
-    print(f"{len(ids_to_delete)} kavram silindi.")
-    print(f"{unchanged_count} kavram değişmedi.")
+    logger.info("%d kavram eklendi/güncellendi.",len(ids_to_upsert))
+    logger.info("%d kavram silindi.",len(ids_to_delete))
+    logger.info("%d kavram değişmedi.",unchanged_count)
 
     if not concepts:
-        print("concepts.json boş. Eklenecek kavram yok.")
+        logger.info("concepts.json boş. Eklenecek kavram yok.")
 
 if __name__ == "__main__":
+    from app.logging_config import configure_logging
+    configure_logging()
     ingest_concepts()

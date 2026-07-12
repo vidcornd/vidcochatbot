@@ -8,6 +8,10 @@ from app.rag.router import route_message
 from app.api.errors import api_error
 from app.api.rate_limit import (check_rate_limit,build_ip_rate_limit_key,build_conversation_rate_limit_key)
 from app.api.auth import verify_widget_api_key
+import logging
+import uuid
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["chat"], dependencies=[Depends(verify_widget_api_key)])
 
@@ -37,16 +41,16 @@ def safe_build_memory_context(conversation_id: str) -> str:
     except Exception:
         return ""
 
-def run_rag_answer_with_timeout(question: str, memory_context: str) -> dict:
-    future = ANSWER_EXECUTOR.submit(rag_service.answer,user_query=question,memory_context=memory_context)
-
+def run_rag_answer_with_timeout(question: str, memory_context: str, request_id: str) -> dict:
+    future = ANSWER_EXECUTOR.submit(rag_service.answer,user_query=question,memory_context=memory_context,request_id=request_id)
     try:
         return future.result(timeout=LLM_TIMEOUT_SECONDS)
     except concurrent.futures.TimeoutError:
         future.cancel()
+        logger.warning("request_id=%s step=rag_answer status=timeout", request_id)
         raise api_error(status_code=504,error="timeout",message="Yanıt hazırlanırken zaman aşımı oluştu. Lütfen tekrar deneyin.")
     except Exception as exc:
-        print(f"rag_answer_error: {exc}")
+        logger.exception("request_id=%s step=rag_answer status=error", request_id)
         raise api_error(status_code=503,error="llm_error",message="Yanıt üretme modeli geçici olarak kullanılamıyor. Lütfen kısa bir süre sonra tekrar deneyin.")
 
 def check_chat_rate_limits(request: Request, conversation_id: str) -> None:
@@ -69,13 +73,16 @@ def check_chat_rate_limits(request: Request, conversation_id: str) -> None:
 
 @router.post("/chat", response_model=ChatResponse)
 def chat(request: Request, chat_request: ChatRequest):
+    request_id = str(uuid.uuid4())
+    logger.info("request_id=%s step=received conversation_id=%s",request_id,chat_request.conversation_id)
     try:
         check_chat_rate_limits(request=request,conversation_id=chat_request.conversation_id)
 
         memory_context = safe_build_memory_context(chat_request.conversation_id)
 
-        route = route_message(chat_request.message, memory_context)
+        route = route_message(chat_request.message, memory_context, request_id=request_id)
         if route.get("needs_context") and not memory_context.strip():
+            logger.info("request_id=%s step=routed intent=%s outcome=needs_context",request_id,route["intent"])
             result = {"answer": "Hangi işlemden sonra ne yapmanız gerektiğini belirtir misiniz? Örneğin muayene raporu, e-imza süreci veya mobil uygulama kurulumu hakkında sorabilirsiniz.","sources": [],"confidence": "low"}
             return ChatResponse(answer=result["answer"],sources=result["sources"],confidence=result["confidence"],conversation_id=chat_request.conversation_id)
         
@@ -86,14 +93,14 @@ def chat(request: Request, chat_request: ChatRequest):
         elif route["intent"] == "fallback":
             result = {"answer": "Bu bilgi Vidco 17020 kullanım kılavuzlarında açıkça bulunamadı.","sources": [],"confidence": "low"}
         else:
-            result = run_rag_answer_with_timeout(question=chat_request.message,memory_context=memory_context)
+            result = run_rag_answer_with_timeout(question=chat_request.message,memory_context=memory_context,request_id=request_id)
 
         safe_save_message(conversation_id=chat_request.conversation_id,role="assistant",content=result["answer"])
         safe_summarize_conversation(chat_request.conversation_id)
-
+        logger.info("request_id=%s step=answered intent=%s confidence=%s",request_id,route["intent"],result["confidence"])
         return ChatResponse(answer=result["answer"],sources=result["sources"],confidence=result["confidence"],conversation_id=chat_request.conversation_id)
     except HTTPException:
         raise
     except Exception as exc:
-        print(f"chat_unhandled_error: {exc}")
+        logger.exception("request_id=%s step=unhandled_error",request_id)
         raise api_error(status_code=500,error="internal_error",message="Beklenmeyen bir hata oluştu.")
