@@ -488,6 +488,45 @@ input {
   background: #9ca3af;
 }
 
+html.is-embed,
+body.is-embed {
+  background: transparent;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.embedRoot {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.embedRoot .chatBubble {
+  margin: auto;
+  box-shadow: none;
+}
+
+.embedRoot .chatWindow {
+  position: static;
+  width: 100%;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  animation: none;
+}
+
+.embedStatus {
+  margin: auto;
+  padding: 16px;
+  max-width: 260px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
 /* Mobile fullscreen */
 
 @media (max-width: 480px) {

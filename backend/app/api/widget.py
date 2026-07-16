@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from app.config import settings
-from app.schemas.widget import WidgetSessionRequest, WidgetSessionResponse
+from app.schemas.widget import WidgetSessionRequest, WidgetSessionResponse, WidgetSessionData
 from app.widget.identity import verify_identity_token, IdentityVerificationError
-from app.widget.session_store import create_session, SESSION_TTL_SECONDS
+from app.widget.session_store import create_session, SESSION_TTL_SECONDS , get_session
 from app.api.errors import api_error
 
 router = APIRouter(prefix="/api/widget", tags=["widget"])
@@ -37,3 +37,20 @@ def create_widget_session(payload: WidgetSessionRequest):
         "origin": payload.origin})
 
     return WidgetSessionResponse(sessionToken=session_token, expiresIn=SESSION_TTL_SECONDS)
+
+@router.get("/session/{session_token}", response_model=WidgetSessionData)
+def read_widget_session(session_token: str):
+    session = get_session(session_token)
+    if not session:
+        raise api_error(status_code=404,error="session_not_found",message="Oturum bulunamadı veya süresi dolmuş.")
+
+    return WidgetSessionData(
+        botId=session.get("bot_id", ""),
+        username=session.get("username"),
+        userEmail=session.get("user_email"),
+        userRoles=session.get("user_roles") or [],
+        rolesVerified=session.get("roles_verified", False),
+        currentPage=session.get("current_page"),
+        pageTitle=session.get("page_title"),
+        origin=session.get("origin", ""),
+    )

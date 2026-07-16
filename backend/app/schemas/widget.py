@@ -30,3 +30,13 @@ class WidgetSessionRequest(BaseModel):
 class WidgetSessionResponse(BaseModel):
     sessionToken: str
     expiresIn: int
+
+class WidgetSessionData(BaseModel):
+    botId: str
+    username: str | None = None
+    userEmail: str | None = None
+    userRoles: list[str] = Field(default_factory=list)
+    rolesVerified: bool = False
+    currentPage: str | None = None
+    pageTitle: str | None = None
+    origin: str
