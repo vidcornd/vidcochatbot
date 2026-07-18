@@ -8,6 +8,7 @@ from app.rag.router import route_message
 from app.api.errors import api_error
 from app.api.rate_limit import (check_rate_limit,build_ip_rate_limit_key,build_conversation_rate_limit_key)
 from app.api.auth import verify_widget_api_key
+from app.schemas.feedback import FeedbackRequest
 import logging
 import uuid
 
@@ -104,3 +105,12 @@ def chat(request: Request, chat_request: ChatRequest):
     except Exception as exc:
         logger.exception("request_id=%s step=unhandled_error",request_id)
         raise api_error(status_code=500,error="internal_error",message="Beklenmeyen bir hata oluştu.")
+
+@router.post("/feedback", status_code=204)
+def feedback(feedback_request: FeedbackRequest):
+    logger.info(
+        "step=feedback conversation_id=%s rating=%s question=%r answer=%r",
+        feedback_request.conversation_id,
+        feedback_request.rating,
+        feedback_request.question[:200],
+        feedback_request.answer[:200])

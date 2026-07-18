@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { sendChatMessage, type Source } from "../api/chatApi";
+import { sendChatMessage, sendFeedback, type Source } from "../api/chatApi";
 import { getConversationId, resetConversationId } from "../utils/conversation";
 import { SourceCard } from "./SourceCard";
+import { FeedbackButtons } from "./FeedbackButtons";
 
 type Message = {
   id: string;
@@ -9,6 +10,8 @@ type Message = {
   content: string;
   sources?: Source[];
   isError?: boolean;
+  question?: string;
+  feedback?: "up" | "down";
 };
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
@@ -64,6 +67,7 @@ export function ChatConversation({ onClose }: ChatConversationProps) {
         role: "assistant",
         content: response.answer,
         sources: response.sources,
+        question: trimmedInput,
       };
 
       setMessages((currentMessages) => [
@@ -92,6 +96,16 @@ export function ChatConversation({ onClose }: ChatConversationProps) {
         inputRef.current?.focus();
       }, 100);
     }
+  }
+
+  function handleFeedback(message: Message, rating: "up" | "down") {
+    setMessages((currentMessages) =>
+      currentMessages.map((current) =>
+        current.id === message.id ? { ...current, feedback: rating } : current
+      )
+    );
+
+    sendFeedback(API_URL,conversationId,rating,message.question ?? "",message.content,API_KEY).catch(() => {});
   }
 
   function handleResetConversation() {
@@ -177,9 +191,17 @@ export function ChatConversation({ onClose }: ChatConversationProps) {
               message.sources.length > 0 && (
                 <SourceCard sources={message.sources} />
               )}
+
+            {message.role === "assistant" &&
+              !message.isError &&
+              message.id !== "welcome-message" && (
+                <FeedbackButtons
+                  value={message.feedback}
+                  onRate={(rating) => handleFeedback(message, rating)}
+                />
+              )}
           </div>
         ))}
-
         {shouldShowExamples && (
           <div className="emptyState">
             <div className="emptyStateTitle">Örnek sorular</div>

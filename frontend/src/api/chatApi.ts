@@ -31,3 +31,28 @@ export async function sendChatMessage(apiUrl: string,conversationId: string,mess
   }
   return data;
 }
+
+export async function sendFeedback(apiUrl: string,conversationId: string,rating: "up" | "down",question: string,answer: string,apiKey?: string): Promise<void> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
+  const response = await fetch(`${apiUrl}/api/feedback`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      conversation_id: conversationId,
+      rating,
+      question,
+      answer,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Geri bildirim gönderilirken bir hata oluştu.");
+  }
+}
