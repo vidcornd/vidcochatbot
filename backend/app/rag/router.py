@@ -1,8 +1,7 @@
 import json
 import unicodedata
 from typing import Literal
-from langchain_google_genai import ChatGoogleGenerativeAI
-from app.config import settings
+from app.rag.chat_models import get_chat_model
 from app.concepts.matcher import ConceptMatcher
 import logging
 logger = logging.getLogger(__name__)
@@ -22,9 +21,6 @@ VALID_INTENTS = {
     "procedural_question",
     "fallback",
 }
-
-def get_chat_model():
-    return ChatGoogleGenerativeAI(model=settings.chat_model,google_api_key=settings.google_api_key,temperature=0)
 
 def normalize_text(text: str) -> str:
     text = text.casefold().strip()
@@ -171,7 +167,7 @@ Beklenen JSON formatı:
 }}
 """
     try:
-        llm = get_chat_model()
+        llm = get_chat_model(temperature=0)
         response = llm.invoke(prompt)
 
         data = extract_json(response.content)

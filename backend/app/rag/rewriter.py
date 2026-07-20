@@ -1,5 +1,4 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from app.config import settings
+from app.rag.chat_models import get_chat_model
 
 FOLLOW_UP_MARKERS = [
     "peki",
@@ -45,9 +44,6 @@ DOMAIN_KEYWORDS = [
     "iş emri",
     "periyodik kontrol",
 ]
-
-def get_chat_model():
-    return ChatGoogleGenerativeAI(model=settings.chat_model,google_api_key=settings.google_api_key,temperature=0.1)
 
 def is_follow_up_question(question: str, memory_context: str = "") -> bool:
     question_lower = question.casefold().strip()

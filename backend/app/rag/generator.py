@@ -1,14 +1,10 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from app.config import settings
+from app.rag.chat_models import get_chat_model
 from app.rag.prompts import RAG_SYSTEM_PROMPT
 from app.rag.retriever import (retrieve_relevant_chunks,format_context,extract_sources)
 import logging
 logger = logging.getLogger(__name__)
 
 FALLBACK_ANSWER = "Bu bilgi Vidco 17020 kullanım kılavuzlarında açıkça bulunamadı."
-
-def get_chat_model():
-    return ChatGoogleGenerativeAI(model=settings.chat_model,google_api_key=settings.google_api_key,temperature=0.1)
 
 def calculate_confidence(chunks: list[dict]) -> str:
     if not chunks:
@@ -155,7 +151,6 @@ Teknik parametre sorularında şu formatı kullan:
 {question}
 </user_question>
 
-Son kontrol — cevabı yazmadan önce: Yukarıdaki soru evet/hayır tipindeyse ("...var mı", "...mi", "...mı", "...olur mu") ve kaynaktaki cevap tek bir koşullu cümleyse, yanıtını numaralı liste YAPMA. Tek bir düz cümle yaz, madde işareti kullanma.
 """
 
     llm = get_chat_model()
