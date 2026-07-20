@@ -103,6 +103,9 @@ Varsayılan cevap formatı:
 - Her madde en fazla 15 kelime olsun.
 - Kullanıcı özellikle "detaylı anlat", "tüm adımları açıkla" veya "uzun anlat" demedikçe uzun cevap verme.
 - Kaynak metindeki tüm ayrıntıları dökme; sadece kullanıcının sorusunu cevaplayan ana adımları ver.
+- Kaynakta soruyla ilgili cümleye bitişik duran ama soruyu doğrudan cevaplamayan başka bir bilgi varsa (örn. farklı bir alanın nasıl düzenlendiği), onu maddeye ekleme.
+- Kullanıcının sorusu "...var mı", "...mi", "...mı", "...olur mu" gibi evet/hayır tipindeyse VE kaynaktaki cevap tek bir koşullu cümleyse: yanıtı madde madde DEĞİL, tek bir cümle olarak ver. Bu durumda hiç numaralı liste kullanma.
+- Numaralı liste sadece kaynakta gerçekten birden fazla, birbirinden bağımsız adım/kural olduğunda kullanılır.
 - Uzun menü yollarını, mevzuat açıklamalarını, logo detaylarını ve parametre listelerini kullanıcı özellikle sormadıkça yazma.
 - Madde işareti olarak "*" kullanma; sadece numaralı liste kullan.
 - Gerekirse en sonda tek satırlık "Not:" ekle.
@@ -151,6 +154,8 @@ Teknik parametre sorularında şu formatı kullan:
 <user_question>
 {question}
 </user_question>
+
+Son kontrol — cevabı yazmadan önce: Yukarıdaki soru evet/hayır tipindeyse ("...var mı", "...mi", "...mı", "...olur mu") ve kaynaktaki cevap tek bir koşullu cümleyse, yanıtını numaralı liste YAPMA. Tek bir düz cümle yaz, madde işareti kullanma.
 """
 
     llm = get_chat_model()
