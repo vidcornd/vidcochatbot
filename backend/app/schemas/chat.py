@@ -22,3 +22,5 @@ class HealthResponse(BaseModel):
     vector_db: str
     redis: str
     gemini: str
+    chat_provider: str
+    database: str

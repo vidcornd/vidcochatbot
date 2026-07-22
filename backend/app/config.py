@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     deepseek_api_key: str = ""
     deepseek_model: str = "deepseek-chat"
     redis_url: str = "redis://localhost:6379/0"
+    database_url: str = ""
     widget_api_key: str = ""
     allowed_origins: str = (
         "http://localhost:3000,"

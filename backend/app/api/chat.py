@@ -9,6 +9,8 @@ from app.api.errors import api_error
 from app.api.rate_limit import (check_rate_limit,build_ip_rate_limit_key,build_conversation_rate_limit_key)
 from app.api.auth import verify_widget_api_key
 from app.schemas.feedback import FeedbackRequest
+from app.schemas.consent import ConsentRequest
+from app.storage.postgres_store import save_feedback, save_consent
 import logging
 import uuid
 
@@ -114,3 +116,21 @@ def feedback(feedback_request: FeedbackRequest):
         feedback_request.rating,
         feedback_request.question[:200],
         feedback_request.answer[:200])
+    try:
+        save_feedback(
+            conversation_id=feedback_request.conversation_id,
+            rating=feedback_request.rating,
+            question=feedback_request.question,
+            answer=feedback_request.answer)
+    except Exception:
+        logger.exception("step=feedback status=db_write_failed conversation_id=%s",feedback_request.conversation_id)
+
+@router.post("/consent", status_code=204)
+def consent(consent_request: ConsentRequest):
+    try:
+        save_consent(session_token=consent_request.session_token,name=consent_request.name)
+    except Exception:
+        logger.exception("step=consent status=db_write_failed")
+        raise api_error(status_code=503,error="consent_save_failed",message="Onay kaydedilemedi. Lütfen tekrar deneyin.")
+
+    logger.info("step=consent status=recorded session_token=%s",consent_request.session_token)
