@@ -85,5 +85,11 @@ export function EmbedChat({ sessionData }: EmbedChatProps) {
     );
   }
 
-  return <ChatConversation onClose={close} />;
+  return (
+    <ChatConversation
+      onClose={close}
+      userRoles={sessionData.userRoles}
+      currentPage={sessionData.currentPage ?? undefined}
+    />
+  );
 }

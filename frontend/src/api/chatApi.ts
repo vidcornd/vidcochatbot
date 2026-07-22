@@ -11,7 +11,7 @@ export type ChatResponse = {
   conversation_id: string;
 };
 
-export async function sendChatMessage(apiUrl: string,conversationId: string,message: string,apiKey?: string): Promise<ChatResponse> {
+export async function sendChatMessage(apiUrl: string,conversationId: string,message: string,apiKey?: string,userRoles?: string[],currentPage?: string): Promise<ChatResponse> {
   const headers: Record<string, string> = {"Content-Type": "application/json"};
   if (apiKey) headers["X-API-Key"] = apiKey;
 
@@ -21,6 +21,8 @@ export async function sendChatMessage(apiUrl: string,conversationId: string,mess
     body: JSON.stringify({
       conversation_id: conversationId,
       message,
+      user_roles: userRoles || [],
+      current_page: currentPage,
     }),
   });
   const data = await response.json();

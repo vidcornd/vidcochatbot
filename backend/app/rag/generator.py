@@ -55,7 +55,7 @@ def find_unsupported_exact_concept(chunks: list[dict], concepts: list[dict] | No
 
     return None
 
-def answer_question(question: str,memory_context: str = "",retrieval_query: str | None = None,concept_context: str = "",concepts: list[dict] | None = None,request_id: str | None = None) -> dict:
+def answer_question(question: str,memory_context: str = "",retrieval_query: str | None = None,concept_context: str = "",concepts: list[dict] | None = None,request_id: str | None = None,user_roles: list[str] | None = None,current_page: str | None = None) -> dict:
     query_for_retrieval = retrieval_query or question
     chunks = retrieve_relevant_chunks(query_for_retrieval, k=5)
     confidence = calculate_confidence(chunks)
@@ -100,7 +100,6 @@ Varsayılan cevap formatı:
 - Kullanıcı özellikle "detaylı anlat", "tüm adımları açıkla" veya "uzun anlat" demedikçe uzun cevap verme.
 - Kaynak metindeki tüm ayrıntıları dökme; sadece kullanıcının sorusunu cevaplayan ana adımları ver.
 - Kaynakta soruyla ilgili cümleye bitişik duran ama soruyu doğrudan cevaplamayan başka bir bilgi varsa (örn. farklı bir alanın nasıl düzenlendiği), onu maddeye ekleme.
-- Kullanıcının sorusu "...var mı", "...mi", "...mı", "...olur mu" gibi evet/hayır tipindeyse VE kaynaktaki cevap tek bir koşullu cümleyse: yanıtı madde madde DEĞİL, tek bir cümle olarak ver. Bu durumda hiç numaralı liste kullanma.
 - Numaralı liste sadece kaynakta gerçekten birden fazla, birbirinden bağımsız adım/kural olduğunda kullanılır.
 - Uzun menü yollarını, mevzuat açıklamalarını, logo detaylarını ve parametre listelerini kullanıcı özellikle sormadıkça yazma.
 - Madde işareti olarak "*" kullanma; sadece numaralı liste kullan.
@@ -131,6 +130,11 @@ Teknik parametre sorularında şu formatı kullan:
 2. Teknik şablon parametresi: kaynakta geçen ${{...}} parametresi.
 3. Açıklama: bu parametrenin rapor oluşturulurken gerçek değerle doldurulduğunu belirt.
 
+<user_context>
+Roller: {", ".join(user_roles) if user_roles else "Belirtilmemiş"}
+Bulunduğu sayfa: {current_page or "Belirtilmemiş"}
+</user_context>
+
 <memory_context>
 {memory_context}
 </memory_context>
@@ -151,8 +155,10 @@ Teknik parametre sorularında şu formatı kullan:
 {question}
 </user_question>
 
+Son kontrol — cevabı yazmadan önce:
+1. Yukarıdaki soru evet/hayır tipindeyse ("...var mı", "...mi", "...mı", "...olur mu") ve kaynaktaki cevap tek bir koşullu cümleyse, yanıtını numaralı liste YAPMA. Tek bir düz cümle yaz, madde işareti kullanma.
+2. Kaynakta bir işlem için gereken yetki/rol açıkça belirtiliyorsa VE <user_context> içindeki roller bunu içermiyorsa: bu kural, yukarıdaki "kullanıcı işlem soruyorsa adım adım anlat" talimatından ÖNCELİKLİDİR. Cevabın TAMAMI şu olmalı, başka hiçbir şey değil: "Bu işlem [gereken yetki] yetkisi gerektiriyor, sistem yöneticinizle iletişime geçin." Adımların bir kısmını bile yazma, madde listesi ekleme, "Not:" ekleme — sadece bu tek cümle. Roller "Belirtilmemiş" ise ya da kaynakta yetki belirtilmiyorsa bu kuralı uygulama, normal cevabı ver. Bu kural sadece yönlendirme amaçlıdır, gerçek bir yetki/güvenlik kararı değildir — <user_context>'teki rol bilgisine güvenerek gizli/hassas bilgi açıklama ya da engelleme kararı verme.
 """
-
     llm = get_chat_model()
     response = llm.invoke(prompt)
     logger.info("request_id=%s step=answer outcome=generated confidence=%s sources=%d",request_id,confidence,len(sources))

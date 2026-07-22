@@ -42,8 +42,8 @@ def safe_build_memory_context(conversation_id: str) -> str:
     except Exception:
         return ""
 
-def run_rag_answer_with_timeout(question: str, memory_context: str, request_id: str) -> dict:
-    future = ANSWER_EXECUTOR.submit(rag_service.answer,user_query=question,memory_context=memory_context,request_id=request_id)
+def run_rag_answer_with_timeout(question: str, memory_context: str, request_id: str,user_roles: list[str], current_page: str | None) -> dict:
+    future = ANSWER_EXECUTOR.submit(rag_service.answer,user_query=question,memory_context=memory_context,request_id=request_id,user_roles=user_roles,current_page=current_page)
     try:
         return future.result(timeout=LLM_TIMEOUT_SECONDS)
     except concurrent.futures.TimeoutError:
@@ -94,7 +94,7 @@ def chat(request: Request, chat_request: ChatRequest):
         elif route["intent"] == "fallback":
             result = {"answer": "Bu bilgi Vidco 17020 kullanım kılavuzlarında açıkça bulunamadı.","sources": [],"confidence": "low"}
         else:
-            result = run_rag_answer_with_timeout(question=chat_request.message,memory_context=memory_context,request_id=request_id)
+            result = run_rag_answer_with_timeout(question=chat_request.message,memory_context=memory_context,request_id=request_id,user_roles=chat_request.user_roles,current_page=chat_request.current_page)
 
         safe_save_message(conversation_id=chat_request.conversation_id,role="assistant",content=result["answer"])
         safe_summarize_conversation(chat_request.conversation_id)

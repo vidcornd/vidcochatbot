@@ -29,9 +29,9 @@ const WELCOME_MESSAGE: Message = {
   content: "Merhaba. Vidco 17020 kullanım kılavuzları hakkında yardımcı olabilirim.",
 };
 
-type ChatConversationProps = { onClose: () => void;};
+type ChatConversationProps = { onClose: () => void;userRoles?: string[];currentPage?: string;};
 
-export function ChatConversation({ onClose }: ChatConversationProps) {
+export function ChatConversation({ onClose, userRoles, currentPage }: ChatConversationProps) {
   const [conversationId, setConversationId] = useState(() => getConversationId());
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
@@ -61,7 +61,7 @@ export function ChatConversation({ onClose }: ChatConversationProps) {
     setIsLoading(true);
 
     try {
-      const response = await sendChatMessage(API_URL,conversationId,trimmedInput,API_KEY);
+      const response = await sendChatMessage(API_URL,conversationId,trimmedInput,API_KEY,userRoles,currentPage);
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",

@@ -3,6 +3,8 @@ from pydantic import BaseModel, Field
 class ChatRequest(BaseModel):
     conversation_id: str = Field(..., min_length=1)
     message: str = Field(..., min_length=1,max_length = 2000)
+    user_roles: list[str] = Field(default_factory=list)
+    current_page: str | None = None
 
 class Source(BaseModel):
     title: str | None = None
