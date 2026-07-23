@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 type LoadState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; sessionData: WidgetSessionData };
+  | { status: "ready"; sessionData: WidgetSessionData; sessionToken: string };
 
 function getSessionTokenFromUrl(): string | null {
   return new URLSearchParams(window.location.search).get("session");
@@ -28,7 +28,7 @@ function EmbedApp() {
     }
 
     fetchWidgetSession(API_URL, sessionToken)
-      .then((sessionData) => setState({ status: "ready", sessionData }))
+      .then((sessionData) => setState({ status: "ready", sessionData, sessionToken }))
       .catch((error: unknown) => {
         const message = error instanceof Error ? error.message : "Oturum bulunamadı veya süresi dolmuş.";
         setState({ status: "error", message });
@@ -45,7 +45,7 @@ function EmbedApp() {
         </div>
       )}
 
-      {state.status === "ready" && <EmbedChat sessionData={state.sessionData} />}
+      {state.status === "ready" && (<EmbedChat sessionData={state.sessionData} sessionToken={state.sessionToken}/>)}
     </div>
   );
 }

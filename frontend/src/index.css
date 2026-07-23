@@ -516,6 +516,75 @@ input {
   background: #9ca3af;
 }
 
+/* KVKK consent gate */
+
+.consentGate {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: #faf7fb;
+}
+
+.consentIntro {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.consentLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.consentNameInput {
+  width: 100%;
+  flex: none;
+}
+
+.consentCheckboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.consentCheckboxRow input[type="checkbox"] {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand);
+  cursor: pointer;
+  flex: none;
+}
+
+.consentCheckboxRow a {
+  color: var(--brand);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.consentCheckboxRow a:hover {
+  text-decoration: underline;
+}
+
+.consentError {
+  font-size: 13px;
+  color: #b3261e;
+  margin: 0;
+}
+
+.consentSubmitButton {
+  width: 100%;
+  margin-top: 4px;
+}
+
 html.is-embed,
 body.is-embed {
   background: transparent;

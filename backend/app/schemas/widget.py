@@ -26,6 +26,7 @@ class WidgetSessionRequest(BaseModel):
     context: WidgetContext = Field(default_factory=WidgetContext)
     identityToken: str | None = None
     origin: str = Field(..., min_length=1)
+    requireConsent: bool = False
 
 class WidgetSessionResponse(BaseModel):
     sessionToken: str
@@ -40,3 +41,4 @@ class WidgetSessionData(BaseModel):
     currentPage: str | None = None
     pageTitle: str | None = None
     origin: str
+    requireConsent: bool = False

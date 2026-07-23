@@ -55,7 +55,8 @@
         currentPage: (config.context && config.context.currentPage) || getCurrentPage(),
         pageTitle: (config.context && config.context.pageTitle) || document.title
       },
-      identityToken: config.identityToken || null
+      identityToken: config.identityToken || null,
+      requireConsent: !!config.requireConsent
     };
   }
 
@@ -71,7 +72,8 @@
         user: config.user,
         context: config.context,
         identityToken: config.identityToken,
-        origin: window.location.origin
+        origin: window.location.origin,
+        requireConsent: config.requireConsent
       })
     })
       .then(function (response) {
@@ -213,11 +215,18 @@
   function handleIframeResize(payload) {
     if (!widgetState.container || !payload) return;
 
-    var maxWidth = Math.max(60, Math.min(500, window.innerWidth - 20));
-    var maxHeight = Math.max(60, Math.min(750, window.innerHeight - 20));
+    var maxWidth = Math.max(60, Math.min(560, window.innerWidth - 20));
+    var maxHeight = Math.max(60, Math.min(820, window.innerHeight - 20));
 
     if (typeof payload.width === "number" && Number.isFinite(payload.width)) widgetState.container.style.width = clamp(payload.width, 60, maxWidth) + "px";
     if (typeof payload.height === "number" && Number.isFinite(payload.height)) widgetState.container.style.height = clamp(payload.height, 60, maxHeight) + "px";
+
+    var isOpenPanel = typeof payload.height === "number" && payload.height > 100;
+    Object.assign(widgetState.container.style, {
+      borderRadius: isOpenPanel ? "20px" : "0",
+      boxShadow: isOpenPanel ? "0 16px 56px rgba(35, 20, 40, 0.22), 0 2px 8px rgba(35, 20, 40, 0.08)" : "none",
+      overflow: isOpenPanel ? "hidden" : "visible"
+    });
   }
 
   function handleParentMessage(event) {

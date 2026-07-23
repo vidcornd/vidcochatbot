@@ -58,3 +58,25 @@ export async function sendFeedback(apiUrl: string,conversationId: string,rating:
     throw new Error("Geri bildirim gönderilirken bir hata oluştu.");
   }
 }
+
+export async function sendConsent(apiUrl: string,sessionToken: string,name: string,apiKey?: string): Promise<void> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (apiKey) {
+    headers["X-API-Key"] = apiKey;
+  }
+
+  const response = await fetch(`${apiUrl}/api/consent`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      session_token: sessionToken,
+      name,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Onay kaydedilemedi. Lütfen tekrar deneyin.");
+  }
+}

@@ -2,6 +2,8 @@ import type { Source } from "../api/chatApi";
 
 type SourceCardProps = {sources: Source[];};
 
+const MAX_VISIBLE_SOURCES = 3;
+
 function getSourceLabel(source: Source): string {
   return source.title || source.source || "Kaynak";
 }
@@ -28,15 +30,16 @@ function deduplicateSources(sources: Source[]): Source[] {
 
 export function SourceCard({ sources }: SourceCardProps) {
   const uniqueSources = deduplicateSources(sources);
+  const visibleSources = uniqueSources.slice(0, MAX_VISIBLE_SOURCES);
 
-  if (uniqueSources.length === 0) return null;
+   if (visibleSources.length === 0) return null;
 
   return (
     <div className="sourceList">
       <div className="sourceListTitle">Kaynaklar</div>
 
       <div className="sourceItems">
-        {uniqueSources.map((source) => (
+        {visibleSources.map((source) => (
           <div key={getSourceKey(source)} className="sourceItem">
             <span className="sourceName">{getSourceLabel(source)}</span>
 

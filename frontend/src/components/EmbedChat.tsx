@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChatConversation } from "./ChatConversation";
 import type { WidgetSessionData } from "../api/widgetApi";
+import { KvkkConsentGate } from "./KvkkConsentGate";
 
-type EmbedChatProps = {sessionData: WidgetSessionData;};
+type EmbedChatProps = {sessionData: WidgetSessionData; sessionToken: string;};
 
 type ParentMessage = {
   source?: string;
@@ -10,12 +11,18 @@ type ParentMessage = {
   payload?: unknown;
 };
 
-const OPEN_SIZE = { width: 380, height: 600 };
+const OPEN_SIZE = { width: 520, height: 760 };
 const CLOSED_SIZE = { width: 80, height: 80 };
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const API_KEY = import.meta.env.VITE_WIDGET_API_KEY || "";
 
-export function EmbedChat({ sessionData }: EmbedChatProps) {
+function getConsentStorageKey(botId: string): string {
+  return `vidco-chat-consent:${botId}`;
+}
+
+export function EmbedChat({sessionData,sessionToken} : EmbedChatProps) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [hasConsented, setHasConsented] = useState( () => window.localStorage.getItem(getConsentStorageKey(sessionData.botId)) === "1");
   const sendToParent = useCallback(
     (type: string, payload?: unknown) => {
       if (!sessionData.origin || window.parent === window) return;
@@ -82,6 +89,21 @@ export function EmbedChat({ sessionData }: EmbedChatProps) {
           <img src="/vidco-logo.png" alt="Vidco" className="chatBubbleLogo" />
         </span>
       </button>
+    );
+  }
+
+  if (sessionData.requireConsent && !hasConsented) {
+    return (
+      <KvkkConsentGate
+        apiUrl={API_URL}
+        sessionToken={sessionToken}
+        apiKey={API_KEY}
+        onClose={close}
+        onConsented={() => {
+          window.localStorage.setItem(getConsentStorageKey(sessionData.botId), "1");
+          setHasConsented(true);
+        }}
+      />
     );
   }
 

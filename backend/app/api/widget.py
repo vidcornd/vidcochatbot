@@ -34,7 +34,8 @@ def create_widget_session(payload: WidgetSessionRequest):
         "roles_verified": roles_verified,
         "current_page": payload.context.currentPage,
         "page_title": payload.context.pageTitle,
-        "origin": payload.origin})
+        "origin": payload.origin,
+        "require_consent": payload.requireConsent})
 
     return WidgetSessionResponse(sessionToken=session_token, expiresIn=SESSION_TTL_SECONDS)
 
@@ -53,4 +54,5 @@ def read_widget_session(session_token: str):
         currentPage=session.get("current_page"),
         pageTitle=session.get("page_title"),
         origin=session.get("origin", ""),
+        requireConsent=session.get("require_consent", False)
     )
