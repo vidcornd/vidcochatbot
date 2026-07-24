@@ -10,7 +10,7 @@ from app.api.rate_limit import (check_rate_limit,build_ip_rate_limit_key,build_c
 from app.api.auth import verify_widget_api_key
 from app.schemas.feedback import FeedbackRequest
 from app.schemas.consent import ConsentRequest
-from app.storage.postgres_store import save_feedback, save_consent
+from app.storage.postgres_store import save_feedback, save_consent ,save_conversation_message
 import logging
 import uuid
 
@@ -31,6 +31,11 @@ def safe_save_message(conversation_id: str, role: str, content: str) -> None:
         save_message(conversation_id=conversation_id,role=role,content=content)
     except Exception:
         pass
+
+    try:
+        save_conversation_message(conversation_id=conversation_id,role=role,content=content)
+    except Exception:
+        logger.exception("step=conversation_persist status=db_write_failed conversation_id=%s",conversation_id)
 
 def safe_summarize_conversation(conversation_id: str) -> None:
     try:

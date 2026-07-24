@@ -55,8 +55,7 @@
         currentPage: (config.context && config.context.currentPage) || getCurrentPage(),
         pageTitle: (config.context && config.context.pageTitle) || document.title
       },
-      identityToken: config.identityToken || null,
-      requireConsent: !!config.requireConsent
+      identityToken: config.identityToken || null
     };
   }
 
@@ -72,8 +71,7 @@
         user: config.user,
         context: config.context,
         identityToken: config.identityToken,
-        origin: window.location.origin,
-        requireConsent: config.requireConsent
+        origin: window.location.origin
       })
     })
       .then(function (response) {

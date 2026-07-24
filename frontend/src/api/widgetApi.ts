@@ -7,7 +7,6 @@ export type WidgetSessionData = {
   currentPage?: string | null;
   pageTitle?: string | null;
   origin: string;
-  requireConsent: boolean;
 };
 
 export async function fetchWidgetSession(apiUrl: string, sessionToken: string): Promise<WidgetSessionData> {

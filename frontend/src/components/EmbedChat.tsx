@@ -92,7 +92,7 @@ export function EmbedChat({sessionData,sessionToken} : EmbedChatProps) {
     );
   }
 
-  if (sessionData.requireConsent && !hasConsented) {
+  if (!hasConsented) {
     return (
       <KvkkConsentGate
         apiUrl={API_URL}

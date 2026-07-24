@@ -26,6 +26,28 @@ def init_db() -> None:
                     consented_at TIMESTAMPTZ NOT NULL DEFAULT now()
                 )
             """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id SERIAL PRIMARY KEY,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+                )
+            """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id SERIAL PRIMARY KEY,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+                )
+            """)
+            cur.execute("""
+                CREATE INDEX IF NOT EXISTS idx_messages_conversation_id
+                ON messages (conversation_id)
+            """)
         conn.commit()
     finally:
         conn.close()
@@ -44,6 +66,18 @@ def save_consent(session_token: str | None, name: str) -> None:
     try:
         with conn.cursor() as cur:
             cur.execute("INSERT INTO consent (session_token, name) VALUES (%s, %s)",(session_token, name))
+        conn.commit()
+    finally:
+        conn.close()
+
+def save_conversation_message(conversation_id: str, role: str, content: str) -> None:
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO messages (conversation_id, role, content) VALUES (%s, %s, %s)",
+                (conversation_id, role, content),
+            )
         conn.commit()
     finally:
         conn.close()
