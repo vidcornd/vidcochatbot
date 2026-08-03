@@ -1,10 +1,13 @@
 from app.rag.chat_models import get_chat_model
 from app.rag.prompts import RAG_SYSTEM_PROMPT
 from app.rag.retriever import (retrieve_relevant_chunks,format_context,extract_sources)
+from app.rag.role_guard import find_missing_required_role, load_roles, load_role_requirements
 import logging
 logger = logging.getLogger(__name__)
 
 FALLBACK_ANSWER = "Bu bilgi Vidco 17020 kullanım kılavuzlarında açıkça bulunamadı."
+ROLES = load_roles()
+ROLE_REQUIREMENTS = load_role_requirements()
 
 def calculate_confidence(chunks: list[dict]) -> str:
     if not chunks:
@@ -69,6 +72,12 @@ def answer_question(question: str,memory_context: str = "",retrieval_query: str 
         logger.info("request_id=%s step=answer outcome=fallback reason=unsupported_concept concept_id=%s",request_id,unsupported_concept.get("concept_id"))
         return {"answer": FALLBACK_ANSWER, "sources": [], "confidence": "low"}
 
+    missing_role = find_missing_required_role(chunks, user_roles, ROLES, ROLE_REQUIREMENTS)
+    if missing_role:
+        logger.info("request_id=%s step=answer outcome=redirect reason=missing_role required_role=%s",request_id,missing_role)
+        redirect_answer = f"Bu işlem {missing_role} yetkisi gerektiriyor, sistem yöneticinizle iletişime geçin."
+        return {"answer": redirect_answer, "sources": [], "confidence": "low"}
+    
     context = format_context(chunks)
     sources = extract_sources(chunks)
 
@@ -157,7 +166,6 @@ Bulunduğu sayfa: {current_page or "Belirtilmemiş"}
 
 Son kontrol — cevabı yazmadan önce:
 1. Yukarıdaki soru evet/hayır tipindeyse ("...var mı", "...mi", "...mı", "...olur mu") ve kaynaktaki cevap tek bir koşullu cümleyse, yanıtını numaralı liste YAPMA. Tek bir düz cümle yaz, madde işareti kullanma.
-2. Kaynakta bir işlem için gereken yetki/rol açıkça belirtiliyorsa VE <user_context> içindeki roller bunu içermiyorsa: bu kural, yukarıdaki "kullanıcı işlem soruyorsa adım adım anlat" talimatından ÖNCELİKLİDİR. Cevabın TAMAMI şu olmalı, başka hiçbir şey değil: "Bu işlem [gereken yetki] yetkisi gerektiriyor, sistem yöneticinizle iletişime geçin." Adımların bir kısmını bile yazma, madde listesi ekleme, "Not:" ekleme — sadece bu tek cümle. Roller "Belirtilmemiş" ise ya da kaynakta yetki belirtilmiyorsa bu kuralı uygulama, normal cevabı ver. Bu kural sadece yönlendirme amaçlıdır, gerçek bir yetki/güvenlik kararı değildir — <user_context>'teki rol bilgisine güvenerek gizli/hassas bilgi açıklama ya da engelleme kararı verme.
 """
     llm = get_chat_model()
     response = llm.invoke(prompt)

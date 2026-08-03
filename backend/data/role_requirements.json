@@ -1,0 +1,67 @@
+{
+  "muayene_onaylama": {
+    "required_roles": ["Muayene Onay Personeli"],
+    "trigger_terms": [
+      "Muayeneyi Onaya Gönderme Akışı",
+      "onay yetkisine de sahipse",
+      "kendi muayenesini kendisi onaylayabilir",
+      "Onaylayan seçimi"
+    ]
+  },
+  "cihaz_ekle": {
+    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "trigger_terms": [
+      "Yeni Cihaz Ekle ekranında",
+      "Ölçüm cihazı ise hangi ölçüm cihazı olduğu seçimi"
+    ]
+  },
+  "cihaz_zimmet_listesi": {
+    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "trigger_terms": [
+      "Cihaz Yönetimi - Zimmet Listesi",
+      "Zimmetlenen Personeller"
+    ]
+  },
+  "yeni_firma_olusturma": {
+    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "trigger_terms": [
+      "Yeni Firma Oluştur menüsünden yeni firma oluşturabilirsiniz",
+      "firma ticari ünvanı muayene raporlarında"
+    ]
+  },
+  "kisiler_yonetimi": {
+    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "trigger_terms": [
+      "Kişiler Yönetimi menüsünde",
+      "Kişi Ekle menüsüne"
+    ]
+  },
+  "muayene_kapsamlari_tanimlama": {
+    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "trigger_terms": [
+      "Muayene Kapsamları menüsü açıldıktan sonra",
+      "kapsama bağlı hizmete onay personeli atanmaması"
+    ]
+  },
+  "muayene_metodlari_tanimlama": {
+    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "trigger_terms": [
+      "Muayene Metotları menüsüne girdikten sonra",
+      "metod türü seçimi yapılarak Oluştur"
+    ]
+  },
+  "muayene_hizmetleri_tanimlama": {
+    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "trigger_terms": [
+      "Muayene hizmetlerimizi tanımladığımız menüdür",
+      "isg katip katogorisi ve akredite durumu"
+    ]
+  },
+  "is_emri_dokumanlari_tanimlama": {
+    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "trigger_terms": [
+      "İş emirleri detayından rapor formları dışında alabileceğiniz dokümanları",
+      "saha görevlendirme, görev bildirim formu"
+    ]
+  }
+}
