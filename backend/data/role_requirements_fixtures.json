@@ -1,0 +1,92 @@
+{
+  "companyaddress_admin": {
+    "chunk_text": "da ID\nalanı dolu gelir, güncelleme yapıldıktan sonra dosya tekrar içe aktarılır ve kayıtlar ID üzerinden\neşleşir.\nŞube / Tesis Yönetimi\nBir firmanın şubesi veya tesisi varsa, sahada görev alınacak yer olarak bunlar MUAYENE/ISO\n17020 > Tanımlamalar > Firma Şube veya Tesis Yönetimi menüsünden tanımlanır; yıldız (*) ile\nişaretli alanlar zorunludur. Oluşturma sonrası ekran detay paneline yönlenir ve girilen bilgilerin\ndoğruluğu kontrol edilebilir.",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "contact_create": {
+    "chunk_text": "\nMUAYENE/ISO 17020 > Tanımlamaları > Kişiler Yönetimi menüsünde sistemde var olan \nfirmalarınızda  bulunan   kişileri listeleyebilir, görüntüleyebilir, düzenleyebilir veya gerekirse \nsilebilirsiniz.  \n \n \n \n \n \nFirmaya yeni kişi eklemek eklemek için Kişi Ekle menüsüne firmaya eklenecek kişi ile ilgili \ngerekli bilgileri girdikten sonra Oluştur butonuna basılır. Kişi ekleme işlemi aynı zamanda \nFirma detayından da yapılabilmektedir. \n \n \nOluştura bastıktan hemen sonra ekran kişi detayı ekranına yönlendirm",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "firmalar.pdf"
+  },
+  "devicelist_admin": {
+    "chunk_text": "inde görüntülenir ve onay geçmişi ile birlikte varsa \nkalibrasyon raporu silinir. \nTamamlanan Periyodik Kontroller menüsündeki Excele Aktar butonu ile \nkalibrasyonu yapılmış olan cihazları ve bilgilerini excel olarak rapor alabilirsiniz.  \n \n \n \n \n \nCihaz Yönetimi - Zimmet Listesi \nCihazların zimmet kayıt bilgilerinin alınabilmesi ve zimmet dosyalarının yüklenebilmesi için \ngeliştirme yapılmıştır.  \n \nMUAYENE/ISO 17020 > Tanımlamaları > Cihaz Tanımlamları > Cihaz Detayı \nmenüsündeki 'Zimmetlenen Personeller' ",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "olcum_cihazlari.pdf"
+  },
+  "equipmentinventory_admin": {
+    "chunk_text": "manın kare kodu ve yönlendirdiği bağlantı farklıdır;\nokutulduğunda doğrudan ilgili muayene raporuna gider. Sabit kare kodda ise tüm ekipmanlara\naynı kare kod yapıştırılır ve rapor, elle yazılan rapor numarası üzerinden sorgulanır.\nDeğişken Kare Kod (Ekipman Envanteri)",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "equipmentinventory_edition": {
+    "chunk_text": "Değişken kare kod sürecinde önce bir basım grubu oluşturulur (MUAYENE/ISO 17020 > Tanımlar\n> Basım Grubu Oluştur); gruba bir isim (örneğin \"A birinci basım grubu\") ve adet (örneğin 200)\nverilir. Grup oluşturulduktan sonra grubun QR listesi Excel'e aktarılır. Bu Excel'de basım grubu\nismi, çevrilecek değer (ekipmanın kısa kodu) ve her ekipmana ait ayrı bağlantı ",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspection_create": {
+    "chunk_text": "metodları, muayene rapor\nformatları ve iş emri dokümanları tanımlanır.\nKapsamlar\nKapsamlar, muayene hizmetlerinin ana başlıklarıdır (örneğin Elektrik, Mekanik, Yangın\nAlgılama). Yeni bir kapsam eklemek için Muayene Kapsamları menüsü açıldıktan sonra Yeni Ekle\nbutonuna basılır. Açılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu\ngirilerek kapsam oluşturulur. Kapsam sorumlusu, kapsama bağlı hizmete onay personeli\natanmadığı durumda, ilgili hizmetin raporunda birinci onayı veren kişi olarak s",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspectionreportcode_admin": {
+    "chunk_text": "na basarak bu işlemi yapabilir\nKuruluş Ayarları > Konfigürasyon ve Tanımlamalar > Muayene/ISO 17020 Konfigürasyonları >\nMuayene Rapor Formatları ekranındaki yeşil renkli “+ Yeni Ekle” butonu sayesinde sistemine\nyeni bir muayene raporunu ekleyebilir.\nForm Rapor Kodlamaları\nForm rapor kodları sayesinde muayene raporlarında seçenekli ifadeler kullanılabilir. Bu özellik\ngenellikle kontrol maddelerinin sonucu için kullanılır. Özellikle kontrol maddelerinin sonucu olan\nUygun-Uygun Değil – Uygulaması Yok gibi seçeneklerde k",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspectionreportcode_create": {
+    "chunk_text": "metodları, muayene rapor\nformatları ve iş emri dokümanları tanımlanır.\nKapsamlar\nKapsamlar, muayene hizmetlerinin ana başlıklarıdır (örneğin Elektrik, Mekanik, Yangın\nAlgılama). Yeni bir kapsam eklemek için Muayene Kapsamları menüsü açıldıktan sonra Yeni Ekle\nbutonuna basılır. Açılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu\ngirilerek kapsam oluşturulur. Kapsam sorumlusu, kapsama bağlı hizmete onay personeli\natanmadığı durumda, ilgili hizmetin raporunda birinci onayı veren kişi olarak s",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspectionreport_create": {
+    "chunk_text": "nize edilmediği (gönderilmediği)\nsürece mobilde \"Güncelle\" ile düzenlenebilir; gönderilip senkronize edildikten sonra mobilde\ndüzenleme yapılamaz, düzenleme yalnızca web üzerinden mümkün olur.\nYeni Muayene ve Hazır Rapor Ekleme\nMuayene yönetiminden \"Yeni Muayene Ekle\" ile kendi iş emrine bağlı manuel muayene\neklenebilir\n (olağan\n dışı\n muayene\n dahil).\n \"Hazır\n Rapor\n Ekleme\",\n sistem\n üzerinden\nraporlanamayan, dışarıda yapılmış bir muayenenin (genellikle iş hijyeni) PDF olarak eklenmesini\nsağlar. Muayeneyi yapa",
+    "required_role": "Muayene Personeli",
+    "source": "is_emri_ve_muayene_yonetimi.pdf"
+  },
+  "inspectionreport_fastcreate": {
+    "chunk_text": "den de yapılabilir. Rapor sistemle senkronize edilmediği (gönderilmediği)\nsürece mobilde \"Güncelle\" ile düzenlenebilir; gönderilip senkronize edildikten sonra mobilde\ndüzenleme yapılamaz, düzenleme yalnızca web üzerinden mümkün olur.\nYeni Muayene ve Hazır Rapor Ekleme\nMuayene yönetiminden \"Yeni Muayene Ekle\" ile kendi iş emrine bağlı manuel muayene\neklenebilir\n (olağan\n dışı\n muayene\n dahil).\n \"Hazır\n Rapor\n Ekleme\",\n sistem\n üzerinden\nraporlanamayan, dışarıda yapılmış bir muayenenin (genellikle iş hijyeni) PDF o",
+    "required_role": "Muayene Personeli",
+    "source": "is_emri_ve_muayene_yonetimi.pdf"
+  },
+  "inspectionreport_oncoming": {
+    "chunk_text": " tarafından görülür ve onay bekleyen muayeneleri listeler; onaylanmış\nancak\n e-imzaya\n gönderilmemiş\n muayeneler\n de\n bu\n ekrandan\n geri\n alınabilir\n (e-imza\ntamamlanmışsa önce e-imzanın geri alınması gerekir). MUAYENE/ISO 17020 > Muayene\nYönetimi > Yaklaşan Muayeneler ekranı, periyodik kontrol dönemi yaklaşan muayeneleri\nlisteler; admin/muayene yöneticisi tümünü, muayene personeli yalnızca kendi yaptıklarını görür.\nBu ekranda genellikle sonraki kontrol tarihine 30-60 gün kalan muayeneler listelenir (örneğin bir\ny",
+    "required_role": "Muayene Personeli",
+    "source": "is_emri_ve_muayene_yonetimi.pdf"
+  },
+  "inspectionreportstats_company": {
+    "chunk_text": "bilir.\nVeri Analizi ve Raporlama\nVeri analizi ve raporlama bölümünde, yapılan muayenelere dair grafik ve Excel raporları üretilir.\nMUAYENE/ISO 17020 > Veri Analizi > Ekipman Muayene Raporu altında dört ana rapor türü\nbulunur: Ekipman Muayene Raporu, Firma Muayene Raporu, TÜRKAK Ek Liste Raporu ve Excel\nRaporları. Bu raporlar kuruluşun kendi planlama, hesaplama ve iş hacmi analizleri ile\nakreditasyon sunumları için kullanılır.\nEkipman Muayene Raporu\nEkipman muayene raporu, belirli bir yıl ve ekipman(lar) için yapıla",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspectionreportstats_excellist": {
+    "chunk_text": "rek Excel'i olduğu gibi TÜRKAK'a iletebilir;\nböylece tüm yıl boyunca hangi raporun hangi tarihte kim tarafından yapıldığını elle\ndoldurmadan, listeyi doğrudan gönderebilir. TÜRKAK bu listeyi akredite hizmetler için her yıl\nzorunlu olarak talep eder.\nExcel Raporları\nExcel raporları, kullanıcının kendi belirlediği filtrelerle serbestçe oluşturduğu Excel çıktılarıdır.\nRapor oluştururken tarih aralığı (örneğin 1 Şubat 2026 ile bugün arası), e-imza durumu\n(e-imzaya gönderilmemişler veya e-imza süreci tamamlanmışlar",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "inspectionreportstats_inspection": {
+    "chunk_text": " ulaşılabilir\nve yeni ekle butonu ile yeni form rapor kodları firma sistemine eklenebilir.\nVeri Analizi ve Raporlama\nVeri analizi ve raporlama bölümünde, yapılan muayenelere dair grafik ve Excel raporları üretilir.\nMUAYENE/ISO 17020 > Veri Analizi > Ekipman Muayene Raporu altında dört ana rapor türü\nbulunur: Ekipman Muayene Raporu, Firma Muayene Raporu, TÜRKAK Ek Liste Raporu ve Excel\nRaporları. Bu raporlar kuruluşun kendi planlama, hesaplama ve iş hacmi analizleri ile\nakreditasyon sunumları için kullanılır.\nEkipman ",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "method_create": {
+    "chunk_text": "rine dönüştürülürken kapsam\nbazında ayrı iş emri oluşturulabilir (elektrik kapsamı ayrı, mekanik kapsamı ayrı); ayrıca kapsam\nkodları muayene raporu özel (akıllı) kodlamasında kullanılabilir.\nYeni bir kapsam eklemek için Muayene Kapsamları menüsünde Yeni Ekle butonu kullanılır;\naçılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu girilerek kapsam\noluşturulur.\nTÜRKAK Muayene Alanları ve Alt Alanları\nTÜRKAK muayene alanları, akreditasyon kapsamının TÜRKAK tarafındaki karşılığıdır. Kuruluşun\nk",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "notificationformat_create": {
+    "chunk_text": "metodları, muayene rapor\nformatları ve iş emri dokümanları tanımlanır.\nKapsamlar\nKapsamlar, muayene hizmetlerinin ana başlıklarıdır (örneğin Elektrik, Mekanik, Yangın\nAlgılama). Yeni bir kapsam eklemek için Muayene Kapsamları menüsü açıldıktan sonra Yeni Ekle\nbutonuna basılır. Açılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu\ngirilerek kapsam oluşturulur. Kapsam sorumlusu, kapsama bağlı hizmete onay personeli\natanmadığı durumda, ilgili hizmetin raporunda birinci onayı veren kişi olarak s",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "reportformat_admin": {
+    "chunk_text": "ngi\nbir durumdan yarım kalırsa rapor sistemde gözükmez çünkü kilitlenir. Bu kilidi de Kuruluş\nAyarları > Konfigürasyon ve Tanımlamalar > Muayene/ISO 17020 Konfigürasyonları > Tüm\nMuayeneler seçeneğinden rapor bulunarak kilidinin açılmasıyla çözülür.\nMuayene Rapor Formatları\nMuayeneler için gerekli raporlar bu başlık altında bulunur. Bu alana Kuruluş Ayarları >\nKonfigürasyon ve Tanımlamalar > Muayene/ISO 17020 Konfigürasyonları > Muayene Rapor\nFormatları yolu izlenerek gelinir. Muayene Rapor Formatları alandan sistemimi",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  },
+  "scope_create": {
+    "chunk_text": "metodları, muayene rapor\nformatları ve iş emri dokümanları tanımlanır.\nKapsamlar\nKapsamlar, muayene hizmetlerinin ana başlıklarıdır (örneğin Elektrik, Mekanik, Yangın\nAlgılama). Yeni bir kapsam eklemek için Muayene Kapsamları menüsü açıldıktan sonra Yeni Ekle\nbutonuna basılır. Açılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu\ngirilerek kapsam oluşturulur. Kapsam sorumlusu, kapsama bağlı hizmete onay personeli\natanmadığı durumda, ilgili hizmetin raporunda birinci onayı veren kişi olarak s",
+    "required_role": "Muayene Hizmetleri Konfigürasyonu",
+    "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+  }
+}

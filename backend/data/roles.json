@@ -4,117 +4,141 @@
     "full_access": true,
     "description": "Diğer tüm yetkilerin yapabildiği tüm işlemleri yapar."
   },
+  "sistem_yoneticisi": {
+    "name": "Sistem Yöneticisi",
+    "full_access": false,
+    "description": "Admin ile aynı şey değildir. Hesap oluşturulurken 'bu kişi sistem yöneticisi mi?' seçeneğiyle belirlenen, Admin'den ayrı bir hesap düzeyi işarettir (rol değildir). Yalnızca aşağıdaki 3 ekranı açar; Admin'e özel diğer ayrıcalıkları (örn. toplu kayıt oluşturma/dışa aktarma) kapsamaz.",
+    "screens": [
+      {"route": "iso_17020/turkakscope/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Türkak Muayene Alanları"},
+      {"route": "iso_17020/turkaksubscope/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Türkak Muayene Alt Alanları"},
+      {"route": "iso_17020/inspectionreport/adminAll", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Tüm Muayeneler"}
+    ]
+  },
   "isg_katip_yoneticisi": {
     "name": "ISG Katip Yöneticisi",
-    "description": "Sistemdeki tüm muayene personelleri için İSG Katip sözleşmesi tanımlama, güncelleme ve silme işlemlerini yapabilir.",
+    "description": "Sistemdeki tüm muayene personelleri için İSG Katip sözleşmesi tanımlama, güncelleme ve silme işlemlerini yapabilir. Bu iki ekran ISG Katip Yöneticisi rolüne özel değildir: ISG Katip Sözleşmeleri ekranını Muayene Yöneticisi de görebilir; ISG Katip Sözleşmeleri Ekle ekranını Muayene Yöneticisi ve Muayene Personeli de görebilir.",
     "screens": [
-      {"route": "iso_17020/Isgcontract/admin", "label": "ISG Katip > ISG Katip Sözleşmeleri"},
-      {"route": "iso_17020/Isgcontract/create", "label": "ISG Katip > ISG Katip Sözleşmeleri Ekle"}
+      {"route": "iso_17020/isgcontract/admin", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri"},
+      {"route": "iso_17020/isgcontract/create", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri Ekle"}
     ]
   },
   "is_emri_sorumlusu": {
     "name": "İş Emri Sorumlusu",
-    "description": "İş emri oluşturabilir, kendisinin sorumlu olarak atandığı ve kendisinin oluşturduğu tüm iş emirlerini görüntüleyebilir ve üzerinde işlem yapabilir.",
+    "description": "İş emri oluşturabilir; kendisinin sorumlu olarak atandığı veya kendisinin oluşturduğu iş emirlerini görüntüleyebilir ve üzerinde işlem yapabilir (bu iki koşuldan biri yeterlidir). Sistemdeki diğer kullanıcılara ait iş emirleri bu yetkiyle görünmez.",
     "screens": [
-      {"route": "iso_17020/workorder/list", "label": "İş Emirleri > İş Emri Listesi"},
-      {"route": "iso_17020/workorder/create", "label": "İş Emirleri > İş emri Oluştur"},
-      {"route": "iso_17020/workorder/vehicleCalendar", "label": "İş Emirleri > Taşıt Takvimi"}
+      {"route": "iso_17020/workorder/list", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Listesi"},
+      {"route": "iso_17020/workorder/listCreate", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Listesi > İş Emri Oluştur (Sorumlu)"},
+      {"route": "iso_17020/workorder/vehicleCalendar", "label": "MUAYENE/ISO 17020 > İş Emirleri > Taşıt Takvimi"},
+      {"route": "iso_17020/workorder/bulkCreate", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Yönetimi > Toplu İş Emirleri Oluştur", "also_requires": ["is_emri_yoneticisi"]}
     ]
   },
   "is_emri_yoneticisi": {
     "name": "İş Emri Yöneticisi",
-    "description": "Tüm İş Emirlerini görüp, üzerinde işlem yapabilir. Toplu iş emri oluşturmak için bir kullanıcıda hem İş Emri Yönetici hem de İş Sorumlusu yetkilerine sahip olmalıdır.",
+    "description": "Tüm iş emirlerini görüp üzerinde işlem yapabilir (kullanıcıyla ilişkili olsun olmasın, başka kullanıcıların oluşturduğu iş emirleri dahil).",
     "screens": [
-      {"route": "iso_17020/workorder/admin", "label": "İş Emirleri > İş emri Yönetimi"},
-      {"route": "iso_17020/workorder/create", "label": "İş Emirleri > İş emri Oluştur"},
-      {"route": "iso_17020/workorder/bulkCreate", "label": "İş Emirleri > İş emri Yönetimi > Toplu İş Emirleri Oluştur", "also_requires": ["is_emri_sorumlusu"]}
+      {"route": "iso_17020/workorder/admin", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Yönetimi"},
+      {"route": "iso_17020/workorder/create", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Oluştur"},
+      {"route": "iso_17020/workorder/bulkCreate", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emri Yönetimi > Toplu İş Emirleri Oluştur", "also_requires": ["is_emri_sorumlusu"]}
     ]
   },
   "muayene_hizmetleri_konfigurasyonu": {
     "name": "Muayene Hizmetleri Konfigürasyonu",
-    "description": "Bütün muayene hizmetleri ekranlarını görebilir, işlem yapabilir.",
+    "description": "Muayene sürecinde form rapor yönetimi, kapsam yönetimi, rapor kodlamaları yönetimi, muayene metodu yönetimi, muayene hizmeti yönetimi ve iş emri doküman yönetimi işlerini yapabilir. Bu alanlarda düzenlemeler gerçekleştirebilir.",
     "screens": [
-      {"route": "iso_17020/scope/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Kapsamlar"},
-      {"route": "iso_17020/method/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Muayene Metodları"},
-      {"route": "iso_17020/inspection/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Muayene Hizmeti"},
-      {"route": "iso_17020/reportFormat/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Muayene Rapor Formatları"},
-      {"route": "iso_17020/notificationFormat/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > İş Emri Dökümanları"},
-      {"route": "iso_17020/inspectionReportCode/admin", "label": "Kuruluş Ayarları > Muayene/ISO 17020 Konfigürasyonları > Form Rapor Kodlamaları"}
+      {"route": "iso_17020/scope/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Kapsamlar"},
+      {"route": "iso_17020/scope/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Kapsamlar > Yeni Ekle"},
+      {"route": "iso_17020/method/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Metodları"},
+      {"route": "iso_17020/method/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Metodları > Yeni Ekle"},
+      {"route": "iso_17020/inspection/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Hizmeti"},
+      {"route": "iso_17020/inspection/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Hizmeti > Yeni Ekle"},
+      {"route": "iso_17020/reportFormat/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Rapor Formatları"},
+      {"route": "iso_17020/reportFormat/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Muayene Rapor Formatları > Yeni Ekle"},
+      {"route": "iso_17020/notificationFormat/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > İş Emri Dökümanları"},
+      {"route": "iso_17020/notificationFormat/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > İş Emri Dökümanları > Yeni Ekle"},
+      {"route": "iso_17020/inspectionReportCode/admin", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Form Rapor Kodlamaları"},
+      {"route": "iso_17020/inspectionReportCode/create", "label": "KURULUŞ AYARLARI > Muayene/ISO 17020 Konfigürasyonları > Form Rapor Kodlamaları > Yeni Ekle"}
     ]
   },
   "muayene_hizmetleri_yoneticisi": {
     "name": "Muayene Hizmetleri Yöneticisi",
-    "description": "Bütün muayene hizmetleri ekranlarını görebilir, işlem yapabilir.",
+    "description": "Türkak Ek Liste Raporlar ekranına erişim sağlar ve bu ekranda işlem yapar. Bu ekrana Muayene|ISO 17020 Veri Analizi yetkisi olan kullanıcılar da erişebilir; ekran iki rol arasında ortaktır.",
     "screens": [
-      {"route": "iso_17020/inspectionreportstats/turkakAddList", "label": "Veri Analizi > Türkak Ek Listeleri"}
+      {"route": "iso_17020/inspectionreportstats/turkakAddList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Türkak Ek Liste Raporlar"}
     ]
   },
   "muayene_onay_personeli": {
     "name": "Muayene Onay Personeli",
-    "description": "Üzerine atanan bütün muayeneleri, muayene onaylarım yetkisi dahilinde görebilir.",
+    "description": "Üzerine atanan bütün muayeneleri Muayene Onayları ekranı üzerinden görüntüler ve onaylar. İş Emirleri Takvimi ekranında tüm personelin takvimini görür (Muayene Personeli'nden farklı olarak kendi günleriyle sınırlanmaz).",
     "screens": [
-      {"route": "iso_17020/workorder/calendar", "label": "İş Emirleri > İş Emirleri Takvimi"},
-      {"route": "iso_17020/inspectionreport/adminApprove", "label": "Muayene Yönetimi > Muayene Onayları"}
+      {"route": "iso_17020/workorder/calendar", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emirleri Takvimi"},
+      {"route": "iso_17020/inspectionreport/adminApprove", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Muayene Onayları"}
     ]
   },
   "muayene_personeli": {
     "name": "Muayene Personeli",
-    "description": "Kendisine atanan iş emirlerini görür, bu iş emirleri ile ilişkili rapor oluşturur ve bu raporların bütün bilgilerine ve sürecine erişebilir.",
+    "description": "Kendisine atanan iş emirlerini görür, bu iş emirleriyle ilişkili rapor oluşturur ve bu raporların bütün bilgilerine ve sürecine erişebilir. İş Emirlerim, Muayenelerim ve Yaklaşan Muayeneler ekranlarında yalnızca kendisine atanan kayıtlar görünür.",
     "screens": [
-      {"route": "iso_17020/workorder/calendar", "label": "İş Emirleri > İş Emirleri Takvimi"},
-      {"route": "iso_17020/workorder/index", "label": "İş Emirleri > İş Emirlerim"},
-      {"route": "iso_17020/inspectionreport/index", "label": "Muayene Yönetimi > Muayenelerim"},
-      {"route": "iso_17020/inspectionreport/oncoming", "label": "Muayene Yönetimi > Yaklaşan Muayeneler"},
-      {"route": "iso_17020/inspectionreport/create", "label": "Muayene Yönetimi > Yeni Muayene Ekle"},
-      {"route": "iso_17020/inspectionreport/fastCreate", "label": "Muayene Yönetimi > Hazır Rapor Ekleme"}
+      {"route": "iso_17020/workorder/calendar", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emirleri Takvimi"},
+      {"route": "iso_17020/workorder/index", "label": "MUAYENE/ISO 17020 > İş Emirleri > İş Emirlerim"},
+      {"route": "iso_17020/isgcontract/index", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmelerim"},
+      {"route": "iso_17020/isgcontract/create", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri Ekle"},
+      {"route": "iso_17020/inspectionreport/index", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Muayenelerim"},
+      {"route": "iso_17020/inspectionreport/oncoming", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Yaklaşan Muayeneler"},
+      {"route": "iso_17020/inspectionreport/create", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Yeni Muayene Ekle"},
+      {"route": "iso_17020/inspectionreport/fastCreate", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Hazır Rapor Ekleme"}
     ]
   },
   "muayene_yoneticisi": {
     "name": "Muayene Yöneticisi",
-    "description": "Tüm muayeneleri görüp, üzerinde işlemler yapabilir.",
+    "description": "Tüm muayeneleri görüp üzerinde işlem yapabilir. ISG Katip Sözleşmeleri ve ISG Katip Sözleşmeleri Ekle ekranlarına da erişebilir (bu ekranlar ISG Katip Yöneticisi rolüyle ortaktır).",
     "screens": [
-      {"route": "iso_17020/inspectionreport/admin", "label": "Muayeneler"},
-      {"route": "iso_17020/inspectionreport/oncoming", "label": "Yaklaşan Muayeneler"},
-      {"route": "iso_17020/inspectionreport/create", "label": "Yeni Muayene Ekle", "also_requires": ["muayene_personeli"]},
-      {"route": "iso_17020/inspectionreport/fastCreate", "label": "Hazır Rapor Ekleme", "also_requires": ["muayene_personeli"]}
+      {"route": "iso_17020/isgcontract/admin", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri"},
+      {"route": "iso_17020/isgcontract/create", "label": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri Ekle"},
+      {"route": "iso_17020/inspectionreport/admin", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Muayeneler"},
+      {"route": "iso_17020/inspectionreport/oncoming", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Yaklaşan Muayeneler"},
+      {"route": "iso_17020/inspectionreport/create", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Yeni Muayene Ekle", "also_requires": ["muayene_personeli"]},
+      {"route": "iso_17020/inspectionreport/fastCreate", "label": "MUAYENE/ISO 17020 > Muayene Yönetimi > Hazır Rapor Ekleme", "also_requires": ["muayene_personeli"]}
     ]
   },
   "muayene_iso17020_odeme_islemleri": {
     "name": "Muayene|ISO 17020 Ödeme İşlemleri",
-    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Ödemeler altındaki menüye ulaşıp, orada bulunan tüm işlemleri yapar.",
+    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Ödeme İşlemleri altındaki menüye ulaşıp orada bulunan tüm işlemleri yapar.",
     "screens": [
-      {"route": "iso_17020/inspectionreport/adminBilled", "label": "Ödeme İşlemleri > Faturalandırma Kayıtları"}
+      {"route": "iso_17020/inspectionreport/adminBilled", "label": "MUAYENE/ISO 17020 > Ödeme İşlemleri > Faturalandırma Kayıtları"}
     ]
   },
   "muayene_iso17020_tanimlama": {
     "name": "Muayene|ISO 17020 Tanımlama",
-    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Tanımlar altındaki menüye ulaşıp, orada bulunan tüm ayarlamaları yapar.",
+    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Tanımlar altındaki menüye ulaşıp orada bulunan tüm tanımlamaları yapar. Müşteri/Firma Yönetimi ve Firma Şube veya Tesis Yönetimi ekranlarındaki toplu kayıt oluşturma ve toplu dışa aktarma düğmeleri bu yetkiye açık değildir; bu işlemler yalnızca Admin kullanıcı tipiyle yapılabilir (Sistem Yöneticisi işareti de bu düğmeleri açmaz).",
     "screens": [
-      {"route": "iso_17020/company/admin", "label": "Tanımlar > Müşteri/Firma Yönetimi"},
-      {"route": "iso_17020/company/create", "label": "Tanımlar > Yeni Müşteri/Firma Oluştur"},
-      {"route": "iso_17020/companyAddress/admin", "label": "Tanımlar > Firma Şube veya Tesis Yönetimi"},
-      {"route": "iso_17020/companyAddress/create", "label": "Tanımlar > Firma Şube veya Tesis Yönetimi > Ekle"},
-      {"route": "iso_17020/contact/admin", "label": "Tanımlar > Kişiler Yönetimi"},
-      {"route": "iso_17020/contact/create", "label": "Tanımlar > Kişi Ekle"},
-      {"route": "iso_17020/deviceList/admin", "label": "Tanımlar > Cihaz Yönetimi"},
-      {"route": "iso_17020/deviceList/staffAdmin", "label": "Tanımlar > Cihaz Yönetimi > Zimmet Listesi"},
-      {"route": "iso_17020/deviceList/create", "label": "Tanımlar > Cihaz Yönetimi > Cihaz Ekle"},
-      {"route": "iso_17020/deviceList/index", "label": "Tanımlar > Kalibrasyon Takibi > Yapılacak Kalibrasyonlar"},
-      {"route": "iso_17020/deviceList/finished", "label": "Tanımlar > Kalibrasyon Takibi > Tamamlanan Kalibrasyonlar"},
-      {"route": "iso_17020/equipmentInventory/admin", "label": "Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Ekipman Envanteri"},
-      {"route": "iso_17020/equipmentInventory/index", "label": "Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Basım Grubu Listesi"},
-      {"route": "iso_17020/equipmentInventory/edition", "label": "Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Basım Grubu Oluştur"},
-      {"route": "iso_17020/equipmentInventory/fixedQr", "label": "Tanımlar > Sabit Karekod Etiketleme"}
+      {"route": "iso_17020/company/admin", "label": "MUAYENE/ISO 17020 > Tanımlar > Müşteri/Firma Yönetimi"},
+      {"route": "iso_17020/company/create", "label": "MUAYENE/ISO 17020 > Tanımlar > Müşteri/Firma Yönetimi > Yeni Oluştur"},
+      {"route": "iso_17020/companyAddress/admin", "label": "MUAYENE/ISO 17020 > Tanımlar > Firma Şube veya Tesis Yönetimi"},
+      {"route": "iso_17020/companyAddress/create", "label": "MUAYENE/ISO 17020 > Tanımlar > Firma Şube veya Tesis Yönetimi > Ekle"},
+      {"route": "iso_17020/contact/admin", "label": "MUAYENE/ISO 17020 > Tanımlar > Kişiler Yönetimi"},
+      {"route": "iso_17020/contact/create", "label": "MUAYENE/ISO 17020 > Tanımlar > Kişiler Yönetimi > Kişi Ekle"},
+      {"route": "iso_17020/deviceList/admin", "label": "MUAYENE/ISO 17020 > Tanımlar > Cihaz Yönetimi"},
+      {"route": "iso_17020/deviceList/staffAdmin", "label": "MUAYENE/ISO 17020 > Tanımlar > Cihaz Yönetimi > Zimmet Listesi"},
+      {"route": "iso_17020/deviceList/create", "label": "MUAYENE/ISO 17020 > Tanımlar > Cihaz Yönetimi > Cihaz Ekle"},
+      {"route": "iso_17020/deviceList/index", "label": "MUAYENE/ISO 17020 > Tanımlar > Kalibrasyon Takibi > Yapılacak Kalibrasyonlar"},
+      {"route": "iso_17020/deviceList/finished", "label": "MUAYENE/ISO 17020 > Tanımlar > Kalibrasyon Takibi > Tamamlanan Kalibrasyonlar"},
+      {"route": "iso_17020/equipmentInventory/admin", "label": "MUAYENE/ISO 17020 > Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Ekipman Envanteri"},
+      {"route": "iso_17020/equipmentInventory/index", "label": "MUAYENE/ISO 17020 > Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Basım Grubu Listesi"},
+      {"route": "iso_17020/equipmentInventory/edition", "label": "MUAYENE/ISO 17020 > Tanımlar > Ekipman Envanteri ve Değişken Karekod Etiketleme > Basım Grubu Oluştur"},
+      {"route": "iso_17020/equipmentInventory/fixedQr", "label": "MUAYENE/ISO 17020 > Tanımlar > Sabit Karekod Etiketleme"}
     ]
   },
   "muayene_iso17020_veri_analizi": {
     "name": "Muayene|ISO 17020 Veri Analizi",
-    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Veri Analizi altındaki menüye ulaşıp, orada bulunan tüm işlemleri yapar.",
+    "description": "Muayene|ISO 17020 modülü içerisinde bulunan Veri Analizi altındaki menüye ulaşıp orada bulunan tüm işlemleri yapar.",
     "screens": [
-      {"route": "iso_17020/inspectionreportstats/inspection", "label": "Veri Analizi > Ekipman Muayene Raporu"},
-      {"route": "iso_17020/inspectionreportstats/company", "label": "Veri Analizi > Firma Muayene Raporu"},
-      {"route": "iso_17020/inspectionreportstats/turkakAddList", "label": "Veri Analizi > Türkak ek Liste Raporlar"},
-      {"route": "iso_17020/inspectionreportstats/excelList", "label": "Veri Analizi > Excel Raporları"}
+      {"route": "iso_17020/inspectionreportstats/inspection", "label": "MUAYENE/ISO 17020 > Veri Analizi > Ekipman Muayene Raporu"},
+      {"route": "iso_17020/inspectionreportstats/company", "label": "MUAYENE/ISO 17020 > Veri Analizi > Firma Muayene Raporu"},
+      {"route": "iso_17020/inspectionreportstats/turkakAddList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Türkak Ek Liste Raporlar"},
+      {"route": "iso_17020/inspectionreportstats/excelList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Excel Raporları"},
+      {"route": "iso_17020/inspectionreportstats/companyList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Excel Raporları > Firmaları Excele Aktar"},
+      {"route": "iso_17020/inspectionreportstats/workOrderList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Excel Raporları > Tüm İş Emirlerini Excele Aktar"},
+      {"route": "iso_17020/inspectionreportstats/reportUsedList", "label": "MUAYENE/ISO 17020 > Veri Analizi > Excel Raporları > İş Emri Uygulama Raporu"}
     ]
   }
 }

@@ -1,6 +1,9 @@
 {
   "muayene_onaylama": {
-    "required_roles": ["Muayene Onay Personeli"],
+    "route": "iso_17020/inspectionreport/adminApprove",
+    "required_roles": [
+      "Muayene Onay Personeli"
+    ],
     "trigger_terms": [
       "Muayeneyi Onaya Gönderme Akışı",
       "onay yetkisine de sahipse",
@@ -9,59 +12,338 @@
     ]
   },
   "cihaz_ekle": {
-    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "route": "iso_17020/deviceList/create",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
     "trigger_terms": [
       "Yeni Cihaz Ekle ekranında",
       "Ölçüm cihazı ise hangi ölçüm cihazı olduğu seçimi"
     ]
   },
   "cihaz_zimmet_listesi": {
-    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "route": "iso_17020/deviceList/staffAdmin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
     "trigger_terms": [
       "Cihaz Yönetimi - Zimmet Listesi",
       "Zimmetlenen Personeller"
     ]
   },
   "yeni_firma_olusturma": {
-    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "route": "iso_17020/company/create",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
     "trigger_terms": [
       "Yeni Firma Oluştur menüsünden yeni firma oluşturabilirsiniz",
       "firma ticari ünvanı muayene raporlarında"
     ]
   },
   "kisiler_yonetimi": {
-    "required_roles": ["Muayene|ISO 17020 Tanımlama"],
+    "route": "iso_17020/contact/admin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
     "trigger_terms": [
       "Kişiler Yönetimi menüsünde",
       "Kişi Ekle menüsüne"
     ]
   },
   "muayene_kapsamlari_tanimlama": {
-    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "route": "iso_17020/scope/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
     "trigger_terms": [
       "Muayene Kapsamları menüsü açıldıktan sonra",
       "kapsama bağlı hizmete onay personeli atanmaması"
     ]
   },
   "muayene_metodlari_tanimlama": {
-    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "route": "iso_17020/method/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
     "trigger_terms": [
       "Muayene Metotları menüsüne girdikten sonra",
       "metod türü seçimi yapılarak Oluştur"
     ]
   },
   "muayene_hizmetleri_tanimlama": {
-    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "route": "iso_17020/inspection/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
     "trigger_terms": [
       "Muayene hizmetlerimizi tanımladığımız menüdür",
       "isg katip katogorisi ve akredite durumu"
     ]
   },
   "is_emri_dokumanlari_tanimlama": {
-    "required_roles": ["Muayene Hizmetleri Konfigürasyonu"],
+    "route": "iso_17020/notificationFormat/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
     "trigger_terms": [
       "İş emirleri detayından rapor formları dışında alabileceğiniz dokümanları",
       "saha görevlendirme, görev bildirim formu"
+    ]
+  },
+  "is_emri_yonetimi_gorme": {
+    "route": "iso_17020/workorder/admin",
+    "required_roles": [
+      "İş Emri Yöneticisi"
+    ],
+    "trigger_terms": [
+      "İş Emri Yönetimi ekranında sistemdeki 102 iş emrinin tamamı görülebilir",
+      "İş emri yöneticisi yetkisine sahip kullanıcı sistemdeki tüm iş emirlerini görür"
+    ]
+  },
+  "is_emri_listesi_sorumlu_gorunumu": {
+    "route": "iso_17020/workorder/list",
+    "required_roles": [
+      "İş Emri Sorumlusu"
+    ],
+    "trigger_terms": [
+      "kendisinin sorumlu olarak atandığı iş emirlerini görür",
+      "sorumlu olarak atanmış 7 iş emri"
+    ]
+  },
+  "faturalandirma_erisim_yetkisi": {
+    "route": "iso_17020/inspectionreport/adminBilled",
+    "required_roles": [
+      "Muayene|ISO 17020 Ödeme İşlemleri"
+    ],
+    "trigger_terms": [
+      "Ödeme (faturalandırma kayıtları) ekranına admin yetkisine sahip kullanıcılar erişebilir",
+      "17020 Ödeme İşlemleri\" yetkisi tanımlanmış kullanıcılar da bu ekrana erişebilir"
+    ]
+  },
+  "isg_katip_sozlesme_ekleme_yetkisi": {
+    "route": "iso_17020/isgcontract/create",
+    "required_roles": [
+      "ISG Katip Yöneticisi",
+      "Muayene Personeli",
+      "Muayene Yöneticisi"
+    ],
+    "trigger_terms": [
+      "Katip sözleşmesi ekleme yetkisi üç rolde bulunur",
+      "Muayene personeli yalnızca kendi adına sözleşme ekleyebilir"
+    ]
+  },
+  "companyaddress_admin": {
+    "route": "iso_17020/companyAddress/admin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Firma Şube veya Tesis Yönetimi menüsünden tanımlanır"
+    ]
+  },
+  "contact_create": {
+    "route": "iso_17020/contact/create",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Firmaya yeni kişi eklemek eklemek için Kişi Ekle menüsüne",
+      "Oluştura bastıktan hemen sonra ekran kişi detayı ekranına yönlendirm"
+    ]
+  },
+  "devicelist_admin": {
+    "route": "iso_17020/deviceList/admin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Cihaz Yönetimi - Zimmet Listesi"
+    ]
+  },
+  "equipmentinventory_admin": {
+    "route": "iso_17020/equipmentInventory/admin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Değişken Kare Kod (Ekipman Envanteri)"
+    ]
+  },
+  "equipmentinventory_edition": {
+    "route": "iso_17020/equipmentInventory/edition",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Basım Grubu Oluştur",
+      "grubun QR listesi Excel'e aktarılır"
+    ]
+  },
+  "inspection_create": {
+    "route": "iso_17020/inspection/create",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu"
+    ]
+  },
+  "inspectionreportcode_admin": {
+    "route": "iso_17020/inspectionReportCode/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "Form Rapor Kodlamaları",
+      "Form rapor kodları sayesinde muayene raporlarında seçenekli ifadeler kullanılabilir"
+    ]
+  },
+  "inspectionreportcode_create": {
+    "route": "iso_17020/inspectionReportCode/create",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu"
+    ]
+  },
+  "inspectionreport_create": {
+    "route": "iso_17020/inspectionreport/create",
+    "required_roles": [
+      "Muayene Personeli",
+      "Muayene Yöneticisi"
+    ],
+    "trigger_terms": [
+      "Hazır Rapor Ekleme",
+      "PDF olarak eklenmesini"
+    ]
+  },
+  "inspectionreport_fastcreate": {
+    "route": "iso_17020/inspectionreport/fastCreate",
+    "required_roles": [
+      "Muayene Personeli",
+      "Muayene Yöneticisi"
+    ],
+    "trigger_terms": [
+      "Hazır Rapor Ekleme",
+      "dışarıda yapılmış bir muayenenin"
+    ]
+  },
+  "inspectionreport_oncoming": {
+    "route": "iso_17020/inspectionreport/oncoming",
+    "required_roles": [
+      "Muayene Personeli",
+      "Muayene Yöneticisi"
+    ],
+    "trigger_terms": [
+      "periyodik kontrol dönemi yaklaşan muayeneleri",
+      "sonraki kontrol tarihine 30-60 gün kalan muayeneler"
+    ]
+  },
+  "inspectionreportstats_company": {
+    "route": "iso_17020/inspectionreportstats/company",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "Firma Muayene Raporu"
+    ]
+  },
+  "inspectionreportstats_excellist": {
+    "route": "iso_17020/inspectionreportstats/excelList",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "Excel Raporları",
+      "kullanıcının kendi belirlediği filtrelerle serbestçe oluşturduğu Excel çıktılarıdır"
+    ]
+  },
+  "inspectionreportstats_inspection": {
+    "route": "iso_17020/inspectionreportstats/inspection",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "Ekipman Muayene Raporu",
+      "dört ana rapor türü"
+    ]
+  },
+  "method_create": {
+    "route": "iso_17020/method/create",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "Muayene Kapsamları menüsünde Yeni Ekle butonu",
+      "kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu"
+    ]
+  },
+  "notificationformat_create": {
+    "route": "iso_17020/notificationFormat/create",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "kapsam sorumlusu"
+    ]
+  },
+  "reportformat_admin": {
+    "route": "iso_17020/reportFormat/admin",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "Muayene Rapor Formatları alandan sistemimi"
+    ]
+  },
+  "scope_create": {
+    "route": "iso_17020/scope/create",
+    "required_roles": [
+      "Muayene Hizmetleri Konfigürasyonu"
+    ],
+    "trigger_terms": [
+      "kapsam kodu ve kapsam sorumlusu"
+    ]
+    },
+  "cihaz_tamamlanan_kalibrasyonlar": {
+    "route": "iso_17020/deviceList/finished",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Tamamlanan Periyodik Kontroller ve Sonuç Geri Alma",
+      "Girilen kontrol sonuçları iki yerden görüntülenir"
+    ]
+  },
+  "cihaz_yapilacak_kalibrasyonlar": {
+    "route": "iso_17020/deviceList/index",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Yapılacak Periyodik Kontroller menüsü"
+    ]
+  },
+  "sabit_karekod_etiketleme": {
+    "route": "iso_17020/equipmentInventory/fixedQr",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Tanımlar > Sabit Karekod",
+      "Etiketleme bölümünden yönetilir. Bu türde tek bir sabit QR kod, tüm ekipmanlara"
+    ]
+  },
+  "is_emirleri_takvimi_gorunumu": {
+    "route": "iso_17020/workorder/calendar",
+    "required_roles": [
+      "Muayene Onay Personeli",
+      "Muayene Personeli"
+    ],
+    "trigger_terms": [
+      "yetkisiyle iş emri takvimi açıldığında ise kullanıcı yalnızca kendi görevli olduğu günleri görür,"
     ]
   }
 }

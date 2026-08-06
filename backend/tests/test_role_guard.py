@@ -130,6 +130,51 @@ REAL_CONTENT_CASES = [
         "ekleyebilirsiniz.",
         "Muayene Hizmetleri Konfigürasyonu",
     ),
+    (
+        "is_emri_yonetimi_gorme",
+        "İş Emri Sorumlusu ile İş Emri Yöneticisi Farkı\n"
+        "İş emri yöneticisi yetkisine sahip kullanıcı sistemdeki tüm iş emirlerini görür ve tamamı üzerinde\n"
+        "işlem yapar. İş emri sorumlusu yetkisine sahip kullanıcı ise iş emri oluşturabilir; ancak yalnızca\n"
+        "kendi oluşturduğu veya kendisinin sorumlu olarak atandığı iş emirleri üzerinde işlem yapabilir.",
+        "İş Emri Yöneticisi",
+    ),
+    (
+        "is_emri_listesi_sorumlu_gorunumu",
+        "İş Emri Listesi (Sorumlu Görünümü)\n"
+        "MUAYENE/ISO 17020 > İş Emirleri > İş Emirleri Listesi altında iş emri sorumlusu yalnızca\n"
+        "kendisinin sorumlu olarak atandığı iş emirlerini görür. Örneğin sorumlu olarak atanmış 7 iş emri.",
+        "İş Emri Sorumlusu",
+    ),
+    (
+        "faturalandirma_erisim_yetkisi",
+        "Erişim Yetkisi\n"
+        "Ödeme (faturalandırma kayıtları) ekranına admin yetkisine sahip kullanıcılar erişebilir. Admin\n"
+        "dışında, \"17020 Ödeme İşlemleri\" yetkisi tanımlanmış kullanıcılar da bu ekrana erişebilir.",
+        "Muayene|ISO 17020 Ödeme İşlemleri",
+    ),
+     (
+        "cihaz_tamamlanan_kalibrasyonlar",
+        "Tamamlanan Periyodik Kontroller ve Sonuç Geri Alma\n"
+        "Girilen kontrol sonuçları iki yerden görüntülenir: MUAYENE/ISO 17020 > Tanımlamalar >\n"
+        "Kalibrasyonlar > Tamamlanan Periyodik Kontroller menüsünde ve Cihaz Detayı ekranındaki\n"
+        "Periyodik Kontrol Geçmişi",
+        "Muayene|ISO 17020 Tanımlama",
+    ),
+    (
+        "cihaz_yapilacak_kalibrasyonlar",
+        "Cihazın kontrol tarihinin takip edilebilmesi için\n"
+        "MUAYENE/ISO 17020 > Tanımlamalar > Kalibrasyonlar > Yapılacak Periyodik Kontroller menüsü\n"
+        "kullanılır. Bu menüde \"Süresi geçenler\", \"1 Ay Kalanlar\", \"3 Ay Kalanlar\", \"6 Ay Kalanlar\" ve \"1\n"
+        "Yıl Kalanlar\" filtreleriyle kolayca arama yapılabilir.",
+        "Muayene|ISO 17020 Tanımlama",
+    ),
+    (
+        "sabit_karekod_etiketleme",
+        "Değişken kare kodun aksine, sabit kare kod, tanımlamalar altındaki MUAYENE/ISO 17020 > Tanımlar > Sabit Karekod\n"
+        "Etiketleme bölümünden yönetilir. Bu türde tek bir sabit QR kod, tüm ekipmanlara (örneğin 50\n"
+        "ekipmanın tamamına) aynı şekilde yapıştırılır.",
+        "Muayene|ISO 17020 Tanımlama",
+    ),
 ]
 
 @pytest.mark.parametrize("requirement_key,chunk_text,required_role", REAL_CONTENT_CASES)
@@ -152,3 +197,31 @@ def test_real_role_requirement_passes_for_authorized_user(requirement_key, chunk
 
     result = find_missing_required_role([make_chunk(chunk_text)], [required_role], roles, role_requirements)
     assert result is None
+
+IS_EMIRLERI_TAKVIMI_CHUNK_TEXT = (
+    "İş emirleri takviminden Taşıt Takvimi bölümü admin yetkisiyle görülür. Yalnızca iş emri sorumlusu\n"
+    "yetkisi olan bir kullanıcıda üstteki admin menüsü hiç görünmez; muayene personeli\n"
+    "yetkisiyle iş emri takvimi açıldığında ise kullanıcı yalnızca kendi görevli olduğu günleri görür,\n"
+    "tüm personelin takvimini görmez."
+)
+
+@pytest.mark.parametrize("authorized_role", ["Muayene Onay Personeli", "Muayene Personeli"])
+def test_is_emirleri_takvimi_passes_for_each_authorized_role(authorized_role):
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    assert "is_emirleri_takvimi_gorunumu" in role_requirements
+
+    result = find_missing_required_role([make_chunk(IS_EMIRLERI_TAKVIMI_CHUNK_TEXT)], [authorized_role], roles, role_requirements)
+    assert result is None
+
+
+def test_is_emirleri_takvimi_blocks_unrelated_role():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+
+    result = find_missing_required_role([make_chunk(IS_EMIRLERI_TAKVIMI_CHUNK_TEXT)], ["Muayene Hizmetleri Konfigürasyonu"], roles, role_requirements)
+    assert result == "Muayene Onay Personeli"
