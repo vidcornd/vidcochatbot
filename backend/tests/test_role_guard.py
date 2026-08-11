@@ -8,8 +8,11 @@ REQUIREMENTS = {
     }
 }
 
-def make_chunk(content: str) -> dict:
-    return {"content": content}
+def make_chunk(content: str, score: float | None = None) -> dict:
+    chunk = {"content": content}
+    if score is not None:
+        chunk["score"] = score
+    return chunk
 
 def test_no_role_info_is_not_blocked():
     roles = load_roles()
@@ -43,11 +46,20 @@ def test_chunk_without_trigger_terms_passes_for_anyone():
     chunks = [make_chunk("Genel bir kullanım sorusu, onay konusuyla ilgisi yok.")]
     assert find_missing_required_role(chunks, ["Muayene Personeli"], roles, REQUIREMENTS) is None
 
-def test_stops_at_first_chunk_matching_a_requirement():
+def test_only_checks_the_lowest_score_chunk_ignores_the_rest():
     roles = load_roles()
     chunks = [
-        make_chunk("Genel bilgi, tetikleyici terim yok."),
-        make_chunk("Muayeneyi yapan kişi onay yetkisine de sahipse kendi muayenesini kendisi onaylayabilir."),
+        make_chunk("Genel bilgi, tetikleyici terim yok.", score=0.30),
+        make_chunk("Muayeneyi yapan kişi onay yetkisine de sahipse kendi muayenesini kendisi onaylayabilir.", score=0.80),
+    ]
+    result = find_missing_required_role(chunks, ["Muayene Personeli"], roles, REQUIREMENTS)
+    assert result is None
+
+def test_checks_the_lowest_score_chunk_even_if_it_is_not_first_in_the_list():
+    roles = load_roles()
+    chunks = [
+        make_chunk("Genel bilgi, tetikleyici terim yok.", score=0.80),
+        make_chunk("Muayeneyi yapan kişi onay yetkisine de sahipse kendi muayenesini kendisi onaylayabilir.", score=0.30),
     ]
     result = find_missing_required_role(chunks, ["Muayene Personeli"], roles, REQUIREMENTS)
     assert result == "Muayene Onay Personeli"
@@ -333,6 +345,27 @@ def test_required_roles_all_blocks_when_any_role_is_missing(user_roles, expected
     result = find_missing_required_role(chunks, user_roles, roles, REQUIRED_ROLES_ALL_REQUIREMENTS)
     assert result == expected_missing
 
+WORKORDER_LISTCREATE_REAL_TEXT = (
+    "KURULUŞ TEST - İş Emri Oluştur (Sorumlu)\n"
+    "İş Emri Sorumlusu'nun kendisinin sorumlu olacağı yeni bir iş emri oluşturabildiği ekran."
+)
+IS_EMRI_YONETICISI_FARKI_REAL_TEXT = (
+    "İş Emri Sorumlusu ile İş Emri Yöneticisi Farkı\n"
+    "İş emri yöneticisi yetkisine sahip kullanıcı sistemdeki tüm iş emirlerini görür ve tamamı üzerinde işlem yapar."
+)
+
+def test_workorder_listcreate_not_blocked_by_coretrieved_yoneticisi_farki_chunk():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    chunks = [
+        make_chunk(WORKORDER_LISTCREATE_REAL_TEXT, score=0.4244),
+        make_chunk(IS_EMRI_YONETICISI_FARKI_REAL_TEXT, score=0.4699),
+    ]
+
+    result = find_missing_required_role(chunks, ["İş Emri Sorumlusu"], roles, role_requirements)
+    assert result is None
 
 WORKORDER_BULKCREATE_CHUNK_TEXT = (
     "KURULUŞ TEST - Toplu İş Emri Oluştur\n"
@@ -364,3 +397,53 @@ def test_workorder_bulkcreate_blocks_user_with_only_one_role():
 
     result = find_missing_required_role([make_chunk(WORKORDER_BULKCREATE_CHUNK_TEXT)], ["İş Emri Yöneticisi"], roles, role_requirements)
     assert result == "İş Emri Sorumlusu"
+
+COMPANY_ADMIN_REAL_TEXT = (
+    "KURULUŞ TEST - Müşteriler\n"
+    "Bu ekrandaki listede sisteme tanımlanmış müşteri firmalar listelenir."
+)
+MUAYENE_ONAYLAMA_REAL_TEXT = (
+    "Muayeneyi Onaya Gönderme Akışı\n"
+    "Muayeneyi yapan kişi onay yetkisine de sahipse kendi muayenesini kendisi onaylayabilir."
+)
+
+def test_missing_role_reason_follows_lowest_score_chunk_only():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    company_admin_more_relevant = [
+        make_chunk(COMPANY_ADMIN_REAL_TEXT, score=0.42),
+        make_chunk(MUAYENE_ONAYLAMA_REAL_TEXT, score=0.60),
+    ]
+    result = find_missing_required_role(company_admin_more_relevant, ["Muayene Personeli"], roles, role_requirements)
+    assert result == "Muayene|ISO 17020 Tanımlama"
+
+    muayene_onaylama_more_relevant = [
+        make_chunk(COMPANY_ADMIN_REAL_TEXT, score=0.60),
+        make_chunk(MUAYENE_ONAYLAMA_REAL_TEXT, score=0.42),
+    ]
+    result_swapped = find_missing_required_role(muayene_onaylama_more_relevant, ["Muayene Personeli"], roles, role_requirements)
+    assert result_swapped == "Muayene Onay Personeli"
+
+EQUIPMENT_INVENTORY_REAL_TEXT = (
+    "KURULUŞ TEST - Ekipman Envanteri\n"
+    "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran."
+)
+EQUIPMENT_INSPECTION_REPORT_REAL_TEXT = (
+    "Ekipman Muayene Raporu\n"
+    "Ekipman muayene raporu, belirli bir yıl ve ekipman(lar) için yapılan muayenelerin grafiksel özetidir."
+)
+
+def test_equipmentinventory_index_not_blocked_by_coretrieved_inspection_report_chunk():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    chunks = [
+        make_chunk(EQUIPMENT_INVENTORY_REAL_TEXT, score=0.4872),
+        make_chunk(EQUIPMENT_INSPECTION_REPORT_REAL_TEXT, score=0.5609),
+    ]
+
+    result = find_missing_required_role(chunks, ["Muayene|ISO 17020 Tanımlama"], roles, role_requirements)
+    assert result is None

@@ -48,6 +48,10 @@ def rerank_chunks(question: str, results: list[tuple]) -> list[tuple]:
     reranked.sort(key=lambda item: item[2])
     return reranked
 
+MAX_RELEVANT_SCORE = 0.70
+
+def filter_relevant(reranked_results: list[tuple]) -> list[tuple]:
+    return [item for item in reranked_results if item[1] <= MAX_RELEVANT_SCORE]
 
 def retrieve_relevant_chunks(question: str, k: int = 3, fetch_k: int = 10):
     vectorstore = get_vectorstore()
@@ -64,7 +68,8 @@ def retrieve_relevant_chunks(question: str, k: int = 3, fetch_k: int = 10):
         results = vectorstore.similarity_search_with_score(query=question,k=fetch_k)
 
     reranked_results = rerank_chunks(question, results)
-    selected_results = reranked_results[:k]
+    relevant_results = filter_relevant(reranked_results)
+    selected_results = relevant_results[:k]
 
     chunks = []
     for document, score, rerank_score in selected_results:
