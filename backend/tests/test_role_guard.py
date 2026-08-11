@@ -175,6 +175,64 @@ REAL_CONTENT_CASES = [
         "ekipmanın tamamına) aynı şekilde yapıştırılır.",
         "Muayene|ISO 17020 Tanımlama",
     ),
+    (
+        "company_admin",
+        "KURULUŞ TEST - Müşteriler\n"
+        "Bu ekrandaki listede sisteme tanımlanmış müşteri firmalar listelenir.\n"
+        "Toplu kayıt oluşturma veya verileri toplu dışa aktarma işlemleri için Admin yetkili bir kullanıcı\n"
+        "ile giriş yapmanız gerekir. Admin yetkili bir kullanıcı ile giriş yaptığınızda, bu ekranda ilgili\n"
+        "işlem butonları görüntülenir. Hesaptaki \"Sistem Yöneticisi\" işareti bu butonları görünür\n"
+        "kılmaz; işlem yalnızca Admin kullanıcı tipine açıktır.",
+        "Muayene|ISO 17020 Tanımlama",
+    ),
+    (
+        "equipmentinventory_index",
+        "KURULUŞ TEST - Ekipman Envanteri\n"
+        "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran. Hangi firmada\n"
+        "hangi ekipmanların bulunduğu buradan izlenir ve etiketleme işlemlerinin dayanağını\n"
+        "oluşturur. Her kayıt, sahada karekod okutularak bir muayeneyle eşleştirilmiş somut bir\n"
+        "ekipmanı temsil eder.",
+        "Muayene|ISO 17020 Tanımlama",
+    ),
+    (
+        "inspectionreportstats_companylist",
+        "KURULUŞ TEST - Firmaları Excele Aktar\n"
+        "Sistemde kayıtlı tüm firmaların temel bilgilerini Excel formatında dışa aktarmanızı sağlar.",
+        "Muayene|ISO 17020 Veri Analizi",
+    ),
+    (
+        "inspectionreportstats_workorderlist",
+        "KURULUŞ TEST - Tüm İş Emirlerini Excele Aktar\n"
+        "Sistemdeki tüm iş emirlerini detaylarıyla birlikte Excel formatında dışa aktarmanızı sağlar.",
+        "Muayene|ISO 17020 Veri Analizi",
+    ),
+    (
+        "inspectionreportstats_reportusedlist",
+        "KURULUŞ TEST - İş Emri Uygulama Raporu\n"
+        "Seçilen tarih aralığı ve firma filtresine göre oluşturulan bu rapor, her iş emri ve muayene\n"
+        "hizmeti için tekliflendirme, planlama, uygulama, onay, imzalama ve gönderim durumlarını\n"
+        "sayısal olarak özetler. Excel formatında dışa aktarılabilir.",
+        "Muayene|ISO 17020 Veri Analizi",
+    ),
+    (
+        "isgcontract_index",
+        "KURULUŞ TEST - ISG Katip Sözleşmeleri\n"
+        "Muayene personellerine ait İSG Katip sözleşmelerinin listelendiği, güncellendiği ve silindiği\n"
+        "ekran. Bu modülde İSG-KATİP sözleşme bilgileri ve ilgili PDF dokümanı yönetilir; sözleşme\n"
+        "numarasının rapora yansıtılması ve müşteriye gönderilen raporlar sonrasında yüklenen PDF\n"
+        "dokümanın müşteri portalında gösterilmesi işlemleri sağlanır.",
+        "ISG Katip Yöneticisi",
+    ),
+    (
+        "workorder_listcreate",
+        "KURULUŞ TEST - İş Emri Oluştur (Sorumlu)\n"
+        "İş Emri Sorumlusu'nun kendisinin sorumlu olacağı yeni bir iş emri oluşturabildiği ekran. İş\n"
+        "Emri Yönetimi altındaki \"İş Emri Oluştur\" ekranından (workorder/create) farklı bir rotadır.\n"
+        "Ekran, İş Emri Sorumlusu yetkisine bağlıdır; İş Emri Yöneticisi yetkisi de bulunan kullanıcılar\n"
+        "bu ekranı görmeye devam eder, ayrıca İş Emri Yönetimi altındaki İş Emri Oluştur ekranını da\n"
+        "kullanabilir. Oluşturma adımları iki ekranda da aynıdır.",
+        "İş Emri Sorumlusu",
+    ),
 ]
 
 @pytest.mark.parametrize("requirement_key,chunk_text,required_role", REAL_CONTENT_CASES)
@@ -225,3 +283,84 @@ def test_is_emirleri_takvimi_blocks_unrelated_role():
 
     result = find_missing_required_role([make_chunk(IS_EMIRLERI_TAKVIMI_CHUNK_TEXT)], ["Muayene Hizmetleri Konfigürasyonu"], roles, role_requirements)
     assert result == "Muayene Onay Personeli"
+
+def test_isgcontract_index_also_passes_for_muayene_yoneticisi():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    chunk_text = (
+        "KURULUŞ TEST - ISG Katip Sözleşmeleri\n"
+        "Muayene personellerine ait İSG Katip sözleşmelerinin listelendiği, güncellendiği ve silindiği\n"
+        "ekran."
+    )
+
+    result = find_missing_required_role([make_chunk(chunk_text)], ["Muayene Yöneticisi"], roles, role_requirements)
+    assert result is None
+
+REQUIRED_ROLES_ALL_REQUIREMENTS = {
+    "toplu_is_emri": {
+        "required_roles_all": ["İş Emri Yöneticisi", "İş Emri Sorumlusu"],
+        "trigger_terms": ["toplu şekilde oluşturulup yönetildiği ekran"],
+    }
+}
+
+
+def test_required_roles_all_passes_when_user_has_every_role():
+    roles = load_roles()
+    chunks = [make_chunk("İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran.")]
+    user_roles = ["İş Emri Yöneticisi", "İş Emri Sorumlusu"]
+    assert find_missing_required_role(chunks, user_roles, roles, REQUIRED_ROLES_ALL_REQUIREMENTS) is None
+
+
+def test_required_roles_all_not_applied_when_no_role_info():
+    roles = load_roles()
+    chunks = [make_chunk("İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran.")]
+    assert find_missing_required_role(chunks, [], roles, REQUIRED_ROLES_ALL_REQUIREMENTS) is None
+
+
+@pytest.mark.parametrize(
+    "user_roles,expected_missing",
+    [
+        (["İş Emri Yöneticisi"], "İş Emri Sorumlusu"),
+        (["İş Emri Sorumlusu"], "İş Emri Yöneticisi"),
+        (["Muayene Personeli"], "İş Emri Yöneticisi"),
+    ],
+)
+def test_required_roles_all_blocks_when_any_role_is_missing(user_roles, expected_missing):
+    roles = load_roles()
+    chunks = [make_chunk("İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran.")]
+    result = find_missing_required_role(chunks, user_roles, roles, REQUIRED_ROLES_ALL_REQUIREMENTS)
+    assert result == expected_missing
+
+
+WORKORDER_BULKCREATE_CHUNK_TEXT = (
+    "KURULUŞ TEST - Toplu İş Emri Oluştur\n"
+    "İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran. Çok sayıda firma veya\n"
+    "ekipman için aynı anda iş emri açılmasını sağlayarak planlama yükünü azaltır. Toplu İş\n"
+    "Emirleri Oluştur ekranına erişebilmek için kullanıcıda hem İş Emri Yöneticisi hem İş Emri\n"
+    "Sorumlusu yetkisinin aynı anda bulunması gerekir."
+)
+
+
+def test_workorder_bulkcreate_passes_for_user_with_both_roles():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    assert "workorder_bulkcreate" in role_requirements
+    assert role_requirements["workorder_bulkcreate"]["required_roles_all"] == ["İş Emri Yöneticisi", "İş Emri Sorumlusu"]
+
+    user_roles = ["İş Emri Yöneticisi", "İş Emri Sorumlusu"]
+    result = find_missing_required_role([make_chunk(WORKORDER_BULKCREATE_CHUNK_TEXT)], user_roles, roles, role_requirements)
+    assert result is None
+
+
+def test_workorder_bulkcreate_blocks_user_with_only_one_role():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+
+    result = find_missing_required_role([make_chunk(WORKORDER_BULKCREATE_CHUNK_TEXT)], ["İş Emri Yöneticisi"], roles, role_requirements)
+    assert result == "İş Emri Sorumlusu"

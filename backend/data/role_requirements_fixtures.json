@@ -88,5 +88,40 @@
     "chunk_text": "metodları, muayene rapor\nformatları ve iş emri dokümanları tanımlanır.\nKapsamlar\nKapsamlar, muayene hizmetlerinin ana başlıklarıdır (örneğin Elektrik, Mekanik, Yangın\nAlgılama). Yeni bir kapsam eklemek için Muayene Kapsamları menüsü açıldıktan sonra Yeni Ekle\nbutonuna basılır. Açılan ekranda kapsamın adı, türü, kapsam kodu ve kapsam sorumlusu\ngirilerek kapsam oluşturulur. Kapsam sorumlusu, kapsama bağlı hizmete onay personeli\natanmadığı durumda, ilgili hizmetin raporunda birinci onayı veren kişi olarak s",
     "required_role": "Muayene Hizmetleri Konfigürasyonu",
     "source": "17020_temel_ayarlar_ve_tanimlamalar.pdf"
+   },
+  "company_admin": {
+    "chunk_text": "MUAYENE/ISO 17020 > Tanımlar > Müşteri/Firma Yönetimi\nKURULUŞ TEST - Müşteriler\nBu ekrandaki listede sisteme tanımlanmış müşteri firmalar listelenir.\nToplu kayıt oluşturma veya verileri toplu dışa aktarma işlemleri için Admin yetkili bir kullanıcı ile giriş yapmanız gerekir.",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "equipmentinventory_index": {
+    "chunk_text": "KURULUŞ TEST - Ekipman Envanteri\nMüşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran. Hangi firmada hangi ekipmanların bulunduğu buradan izlenir ve etiketleme işlemlerinin dayanağını oluşturur.",
+    "required_role": "Muayene|ISO 17020 Tanımlama",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "inspectionreportstats_companylist": {
+    "chunk_text": "KURULUŞ TEST - Firmaları Excele Aktar\nSistemde kayıtlı tüm firmaların temel bilgilerini Excel formatında dışa aktarmanızı sağlar.",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "inspectionreportstats_workorderlist": {
+    "chunk_text": "KURULUŞ TEST - Tüm İş Emirlerini Excele Aktar\nSistemdeki tüm iş emirlerini detaylarıyla birlikte Excel formatında dışa aktarmanızı sağlar.",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "inspectionreportstats_reportusedlist": {
+    "chunk_text": "KURULUŞ TEST - İş Emri Uygulama Raporu\nSeçilen tarih aralığı ve firma filtresine göre oluşturulan bu rapor, her iş emri ve muayene hizmeti için tekliflendirme, planlama, uygulama, onay, imzalama ve gönderim durumlarını sayısal olarak özetler.",
+    "required_role": "Muayene|ISO 17020 Veri Analizi",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "isgcontract_index": {
+    "chunk_text": "MUAYENE/ISO 17020 > ISG Katip > ISG Katip Sözleşmeleri\nKURULUŞ TEST - ISG Katip Sözleşmeleri\nMuayene personellerine ait İSG Katip sözleşmelerinin listelendiği, güncellendiği ve silindiği ekran. Bu modülde İSG-KATİP sözleşme bilgileri ve ilgili PDF dokümanı yönetilir.",
+    "required_role": "ISG Katip Yöneticisi",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
+  },
+  "workorder_listcreate": {
+    "chunk_text": "KURULUŞ TEST - İş Emri Oluştur (Sorumlu)\nİş Emri Sorumlusu'nun kendisinin sorumlu olacağı yeni bir iş emri oluşturabildiği ekran. İş Emri Yönetimi altındaki \"İş Emri Oluştur\" ekranından (workorder/create) farklı bir rotadır.",
+    "required_role": "İş Emri Sorumlusu",
+    "source": "eksik_ekranlar_rol_notlari.pdf"
   }
 }

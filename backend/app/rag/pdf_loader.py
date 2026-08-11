@@ -19,6 +19,7 @@ DOCUMENT_TITLES = {
     "musteri_yonetimi_temel_ayarlari.pdf": "Müşteri Yönetimi Temel Ayarları",
     "olcum_cihazlari.pdf": "Ölçüm Cihazları",
     "rapor_hazirlama_parametre_rehberi.pdf": "17020 Muayene Raporu Hazırlama ve Parametre Kullanım Rehberi",
+    "eksik_ekranlar_rol_notlari.pdf": "Eksik Ekranlar - Rol ve Erişim Notları",
 }
 
 def load_all_pdfs(raw_dir: str = "data/raw") -> list[dict]:

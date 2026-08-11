@@ -43,6 +43,14 @@ def find_missing_required_role(chunks: list[dict],user_roles: list[str] | None,r
     for requirement in role_requirements.values():
         if not chunks_mention_requirement(chunks, requirement):
             continue
+
+        required_roles_all = requirement.get("required_roles_all")
+        if required_roles_all:
+            missing = [role for role in required_roles_all if role not in user_roles_normalized]
+            if missing:
+                return missing[0]
+            continue
+        
         required_roles = requirement.get("required_roles") or []
         if not required_roles:
             continue

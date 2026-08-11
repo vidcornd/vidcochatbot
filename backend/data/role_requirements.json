@@ -345,5 +345,79 @@
     "trigger_terms": [
       "yetkisiyle iş emri takvimi açıldığında ise kullanıcı yalnızca kendi görevli olduğu günleri görür,"
     ]
+  },
+  "company_admin": {
+    "route": "iso_17020/company/admin",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "sisteme tanımlanmış müşteri firmalar listelenir"
+    ]
+  },
+  "equipmentinventory_index": {
+    "route": "iso_17020/equipmentInventory/index",
+    "required_roles": [
+      "Muayene|ISO 17020 Tanımlama"
+    ],
+    "trigger_terms": [
+      "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran"
+    ]
+  },
+  "inspectionreportstats_companylist": {
+    "route": "iso_17020/inspectionreportstats/companyList",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "Sistemde kayıtlı tüm firmaların temel bilgilerini Excel formatında dışa aktarmanızı sağlar"
+    ]
+  },
+  "inspectionreportstats_workorderlist": {
+    "route": "iso_17020/inspectionreportstats/workOrderList",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "Sistemdeki tüm iş emirlerini detaylarıyla birlikte Excel formatında dışa aktarmanızı sağlar"
+    ]
+  },
+  "inspectionreportstats_reportusedlist": {
+    "route": "iso_17020/inspectionreportstats/reportUsedList",
+    "required_roles": [
+      "Muayene|ISO 17020 Veri Analizi"
+    ],
+    "trigger_terms": [
+      "tekliflendirme, planlama, uygulama, onay, imzalama ve gönderim durumlarını"
+    ]
+  },
+  "isgcontract_index": {
+    "route": "iso_17020/isgcontract/index",
+    "required_roles": [
+      "ISG Katip Yöneticisi",
+      "Muayene Yöneticisi"
+    ],
+    "trigger_terms": [
+      "Muayene personellerine ait İSG Katip sözleşmelerinin listelendiği, güncellendiği ve silindiği"
+    ]
+  },
+  "workorder_listcreate": {
+    "route": "iso_17020/workorder/listCreate",
+    "required_roles": [
+      "İş Emri Sorumlusu"
+    ],
+    "trigger_terms": [
+      "İş Emri Sorumlusu'nun kendisinin sorumlu olacağı yeni bir iş emri oluşturabildiği ekran"
+    ]
+  },
+  "workorder_bulkcreate": {
+    "route": "iso_17020/workorder/bulkCreate",
+    "required_roles_all": [
+      "İş Emri Yöneticisi",
+      "İş Emri Sorumlusu"
+    ],
+    "trigger_terms": [
+      "İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran"
+    ]
   }
 }
