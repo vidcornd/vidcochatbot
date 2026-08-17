@@ -1,9 +1,13 @@
 import json
 from pathlib import Path
+import re
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 ROLES_PATH = DATA_DIR / "roles.json"
 ROLE_REQUIREMENTS_PATH = DATA_DIR / "role_requirements.json"
+
+def _normalize_whitespace(text: str) -> str:
+    return re.sub(r"\s+", " ", text)
 
 def load_roles() -> dict:
     with open(ROLES_PATH, encoding="utf-8") as f:
@@ -20,11 +24,11 @@ def full_access_role_names(roles: dict) -> set[str]:
     return {data["name"] for data in roles.values() if data.get("full_access")}
 
 def chunk_mentions_requirement(chunk: dict, requirement: dict) -> bool:
-    terms = [term.casefold() for term in requirement.get("trigger_terms", [])]
+    terms = [_normalize_whitespace(term.casefold()) for term in requirement.get("trigger_terms", [])]
     if not terms:
         return False
 
-    content = chunk["content"].casefold()
+    content = _normalize_whitespace(chunk["content"].casefold())
     return any(term in content for term in terms)
 
 def missing_role_for_requirement(requirement: dict, user_roles_normalized: set[str]) -> str | None:

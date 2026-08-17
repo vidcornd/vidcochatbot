@@ -97,7 +97,6 @@
       "İş Emri Yöneticisi"
     ],
     "trigger_terms": [
-      "İş Emri Yönetimi ekranında sistemdeki 102 iş emrinin tamamı görülebilir",
       "İş emri yöneticisi yetkisine sahip kullanıcı sistemdeki tüm iş emirlerini görür"
     ]
   },
@@ -167,7 +166,8 @@
       "Muayene|ISO 17020 Tanımlama"
     ],
     "trigger_terms": [
-      "Değişken Kare Kod (Ekipman Envanteri)"
+      "Değişken Kare Kod (Ekipman Envanteri)",
+      "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran"
     ]
   },
   "equipmentinventory_edition": {
@@ -355,15 +355,6 @@
       "sisteme tanımlanmış müşteri firmalar listelenir"
     ]
   },
-  "equipmentinventory_index": {
-    "route": "iso_17020/equipmentInventory/index",
-    "required_roles": [
-      "Muayene|ISO 17020 Tanımlama"
-    ],
-    "trigger_terms": [
-      "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran"
-    ]
-  },
   "inspectionreportstats_companylist": {
     "route": "iso_17020/inspectionreportstats/companyList",
     "required_roles": [
@@ -392,14 +383,14 @@
     ]
   },
   "isgcontract_index": {
-    "route": "iso_17020/isgcontract/index",
     "required_roles": [
       "ISG Katip Yöneticisi",
       "Muayene Yöneticisi"
     ],
     "trigger_terms": [
       "Muayene personellerine ait İSG Katip sözleşmelerinin listelendiği, güncellendiği ve silindiği"
-    ]
+    ],
+    "route": "iso_17020/isgcontract/admin"
   },
   "workorder_listcreate": {
     "route": "iso_17020/workorder/listCreate",

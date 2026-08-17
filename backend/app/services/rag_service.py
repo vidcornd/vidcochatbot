@@ -1,6 +1,6 @@
 from typing import Any
 from app.concepts.resolver import ConceptResolver
-from app.rag.rewriter import rewrite_follow_up_question
+from app.rag.rewriter import rewrite_follow_up_question, enrich_query_with_page
 from app.rag.retriever import retrieve_relevant_chunks
 from app.rag.generator import answer_question
 
@@ -34,7 +34,8 @@ class RagService:
         concept_context = self.concept_resolver.build_context(concepts)
 
         rewritten_query = rewrite_follow_up_question(question=user_query,memory_context=memory_context,concept_context=concept_context)
-        result = answer_question(question=user_query,memory_context=memory_context,retrieval_query=rewritten_query,concept_context=concept_context,concepts=concepts,request_id=request_id,user_roles=user_roles,current_page=current_page)
+        retrieval_query = enrich_query_with_page(rewritten_query, current_page)
+        result = answer_question(question=user_query,memory_context=memory_context,retrieval_query=retrieval_query,concept_context=concept_context,concepts=concepts,request_id=request_id,user_roles=user_roles,current_page=current_page)
 
         return {
             "answer": result["answer"],

@@ -94,11 +94,6 @@
     "required_role": "Muayene|ISO 17020 Tanımlama",
     "source": "eksik_ekranlar_rol_notlari.pdf"
   },
-  "equipmentinventory_index": {
-    "chunk_text": "KURULUŞ TEST - Ekipman Envanteri\nMüşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran. Hangi firmada hangi ekipmanların bulunduğu buradan izlenir ve etiketleme işlemlerinin dayanağını oluşturur.",
-    "required_role": "Muayene|ISO 17020 Tanımlama",
-    "source": "eksik_ekranlar_rol_notlari.pdf"
-  },
   "inspectionreportstats_companylist": {
     "chunk_text": "KURULUŞ TEST - Firmaları Excele Aktar\nSistemde kayıtlı tüm firmaların temel bilgilerini Excel formatında dışa aktarmanızı sağlar.",
     "required_role": "Muayene|ISO 17020 Veri Analizi",

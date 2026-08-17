@@ -1,4 +1,6 @@
+from urllib.parse import parse_qs, urlparse
 from app.rag.chat_models import get_chat_model
+from app.rag.role_guard import load_roles
 
 FOLLOW_UP_MARKERS = [
     "peki",
@@ -123,3 +125,38 @@ Yeniden yazılmış bağımsız RAG arama sorgusu:
 
     except Exception:
         return question
+
+def extract_route(current_page: str | None) -> str | None:
+    if not current_page:
+        return None
+
+    query_params = parse_qs(urlparse(current_page).query)
+    route = query_params.get("r", [None])[0]
+    return route or None
+
+def build_route_label_map(roles: dict) -> dict[str, str]:
+    mapping = {}
+    for data in roles.values():
+        for screen in data.get("screens", []):
+            mapping[screen["route"]] = screen["label"]
+    return mapping
+
+def page_hint_label(current_page: str | None, roles: dict) -> str | None:
+    route = extract_route(current_page)
+    if not route:
+        return None
+
+    label = build_route_label_map(roles).get(route)
+    if not label:
+        return None
+    
+    return label.split(">")[-1].strip()
+
+def enrich_query_with_page(query: str, current_page: str | None, roles: dict | None = None) -> str:
+    roles = load_roles() if roles is None else roles
+    screen_name = page_hint_label(current_page, roles)
+
+    if not screen_name:
+        return query
+
+    return f"{query} (İlgili ekran: {screen_name})"

@@ -46,6 +46,18 @@ def test_chunk_without_trigger_terms_passes_for_anyone():
     chunks = [make_chunk("Genel bir kullanım sorusu, onay konusuyla ilgisi yok.")]
     assert find_missing_required_role(chunks, ["Muayene Personeli"], roles, REQUIREMENTS) is None
 
+def test_trigger_term_matches_across_pdf_line_wrap_newline():
+    roles = load_roles()
+    requirements = {
+        "test_gerekli": {
+            "required_roles": ["Muayene Onay Personeli"],
+            "trigger_terms": ["onay yetkisine de sahipse"],
+        }
+    }
+    chunk = make_chunk("Muayeneyi yapan kişi onay yetkisine\nde sahipse kendi muayenesini kendisi onaylayabilir.")
+    result = find_missing_required_role([chunk], ["Muayene Personeli"], roles, requirements)
+    assert result == "Muayene Onay Personeli"
+
 def test_only_checks_the_lowest_score_chunk_ignores_the_rest():
     roles = load_roles()
     chunks = [
@@ -198,7 +210,7 @@ REAL_CONTENT_CASES = [
         "Muayene|ISO 17020 Tanımlama",
     ),
     (
-        "equipmentinventory_index",
+        "equipmentinventory_admin",
         "KURULUŞ TEST - Ekipman Envanteri\n"
         "Müşterilere ait, muayene edilen ekipmanların envanter olarak tutulduğu ekran. Hangi firmada\n"
         "hangi ekipmanların bulunduğu buradan izlenir ve etiketleme işlemlerinin dayanağını\n"
@@ -267,6 +279,38 @@ def test_real_role_requirement_passes_for_authorized_user(requirement_key, chunk
 
     result = find_missing_required_role([make_chunk(chunk_text)], [required_role], roles, role_requirements)
     assert result is None
+
+ISG_KATIP_EKLEME_CHUNK_TEXT = (
+    "İSG Katip Sözleşmeleri\n"
+    "Amaç ve Rol Bazlı Yetki\n"
+    "Periyodik kontrol niteliğindeki muayenelerin onaya gönderilebilmesi ve onaylanabilmesi için,\n"
+    "ilgili muayene personeline ait ve muayene tarih aralığını kapsayan geçerli bir İSG Katip\n"
+    "sözleşmesi gerekir; İSG Katip sözleşmesi olmayan periyodik kontroller onaya gönderilemez. İSG\n"
+    "Katip sözleşmesi ekleme yetkisi üç rolde bulunur: muayene personeli, admin ve İSG Katip\n"
+    "yöneticisi. Muayene personeli yalnızca kendi adına sözleşme ekleyebilir ve yalnızca kendi\n"
+    "sözleşmelerini görüntüleyebilir; admin ve İSG Katip yöneticisi ise tüm personeller adına\n"
+    "sözleşme ekleyebilir ve tüm sözleşmeleri görüntüleyebilir."
+)
+
+@pytest.mark.parametrize("authorized_role", ["ISG Katip Yöneticisi", "Muayene Personeli", "Muayene Yöneticisi"])
+def test_isg_katip_ekleme_passes_for_each_authorized_role(authorized_role):
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+    assert "isg_katip_sozlesme_ekleme_yetkisi" in role_requirements
+
+    result = find_missing_required_role([make_chunk(ISG_KATIP_EKLEME_CHUNK_TEXT)], [authorized_role], roles, role_requirements)
+    assert result is None
+
+def test_isg_katip_ekleme_blocks_unrelated_role():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+
+    result = find_missing_required_role([make_chunk(ISG_KATIP_EKLEME_CHUNK_TEXT)], ["Muayene Hizmetleri Konfigürasyonu"], roles, role_requirements)
+    assert result == "ISG Katip Yöneticisi"
 
 IS_EMIRLERI_TAKVIMI_CHUNK_TEXT = (
     "İş emirleri takviminden Taşıt Takvimi bölümü admin yetkisiyle görülür. Yalnızca iş emri sorumlusu\n"
@@ -367,6 +411,29 @@ def test_workorder_listcreate_not_blocked_by_coretrieved_yoneticisi_farki_chunk(
     result = find_missing_required_role(chunks, ["İş Emri Sorumlusu"], roles, role_requirements)
     assert result is None
 
+IS_EMRI_LISTESI_SORUMLU_GORUNUMU_REAL_TEXT = (
+    "İş Emri Listesi (Sorumlu Görünümü)\n"
+    "MUAYENE/ISO 17020 > İş Emirleri > İş Emirleri Listesi altında iş emri sorumlusu yalnızca\n"
+    "kendisinin sorumlu olarak atandığı iş emirlerini görür. Örneğin sorumlu olarak atanmış 7 iş emri\n"
+    "listelenirken, İş Emri Yönetimi ekranında sistemdeki 102 iş emrinin tamamı görülebilir; bu iş\n"
+    "emirlerinin bir kısmı başka bir admin tarafından oluşturulmuş, kullanıcı ise sorumlu olarak\n"
+    "atanmış olabilir."
+)
+
+def test_is_emri_listesi_sorumlu_gorunumu_not_blocked_by_own_contrast_sentence():
+    from app.rag.role_guard import load_role_requirements
+
+    roles = load_roles()
+    role_requirements = load_role_requirements()
+
+    result = find_missing_required_role(
+        [make_chunk(IS_EMRI_LISTESI_SORUMLU_GORUNUMU_REAL_TEXT)],
+        ["İş Emri Sorumlusu"],
+        roles,
+        role_requirements,
+    )
+    assert result is None
+
 WORKORDER_BULKCREATE_CHUNK_TEXT = (
     "KURULUŞ TEST - Toplu İş Emri Oluştur\n"
     "İş emirlerinin tek tek değil, toplu şekilde oluşturulup yönetildiği ekran. Çok sayıda firma veya\n"
@@ -435,7 +502,7 @@ EQUIPMENT_INSPECTION_REPORT_REAL_TEXT = (
     "Ekipman muayene raporu, belirli bir yıl ve ekipman(lar) için yapılan muayenelerin grafiksel özetidir."
 )
 
-def test_equipmentinventory_index_not_blocked_by_coretrieved_inspection_report_chunk():
+def test_equipmentinventory_admin_not_blocked_by_coretrieved_inspection_report_chunk():
     from app.rag.role_guard import load_role_requirements
 
     roles = load_roles()
