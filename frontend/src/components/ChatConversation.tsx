@@ -135,7 +135,7 @@ export function ChatConversation({ onClose, userRoles, currentPage }: ChatConver
     <div className="chatWindow">
       <div className="chatHeader">
         <div>
-          <h2>Vidco Yardım Asistanı</h2>
+          <h2>Vidco Dijital Yardım Asistanı</h2>
           <p>17020 Kullanım Kılavuzları</p>
         </div>
 

@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 from app.rag.pdf_loader import load_pdf, load_all_pdfs
 from app.rag.chunker import create_chunks
-from app.rag.vectorstore import (delete_document_chunks,ingest_documents,reset_chroma)
+from app.rag.vectorstore import (delete_document_chunks,ingest_documents,reset_vectorstore)
 from app.rag.document_id import normalize_document_id
 from app.rag.document_registry import (calculate_file_hash,is_document_unchanged,load_registry,reset_registry,save_registry,update_document_record)
 import logging
@@ -44,13 +44,13 @@ def ingest_pdf(pdf_path: Path,registry: dict) -> tuple[int, int]:
 def main():
     configure_logging()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--reset",action="store_true",help="Reset ChromaDB and ingest registry before ingesting")
+    parser.add_argument("--reset",action="store_true",help="Reset vector store and ingest registry before ingesting")
     args = parser.parse_args()
 
     logger.info("Starting ingestion...")
 
     if args.reset:
-        reset_chroma()
+        reset_vectorstore()
         reset_registry()
 
     registry = load_registry()

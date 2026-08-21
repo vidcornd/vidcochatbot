@@ -40,7 +40,7 @@ export function KvkkConsentGate({ apiUrl, sessionToken, apiKey, onConsented, onC
     <div className="chatWindow">
       <div className="chatHeader">
         <div>
-          <h2>Vidco Yardım Asistanı</h2>
+          <h2>Vidco Dijital Yardım Asistanı</h2>
           <p>Sohbete başlamadan önce</p>
         </div>
 

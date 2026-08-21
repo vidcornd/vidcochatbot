@@ -82,7 +82,7 @@ export function EmbedChat({sessionData,sessionToken} : EmbedChatProps) {
       <button
         className="chatBubble"
         onClick={open}
-        aria-label="Vidco yardım asistanını aç"
+        aria-label="Vidco Dijital Yardım Asistanı'nı aç"
         type="button"
       >
         <span className="chatBubbleLogoWrap">

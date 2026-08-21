@@ -18,27 +18,25 @@ app.include_router(chat_router)
 app.include_router(widget_router)
 app.add_middleware(CORSMiddleware,allow_origins=settings.allowed_origins_list,allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 
-if settings.database_url:
-    try:
-        init_db()
-    except Exception as error:
-        logger.warning("Postgres init failed: %s",error)
+try:
+    init_db()
+except Exception as error:
+    logger.warning("Postgres init failed: %s",error)
 
 @app.get("/api/health", response_model=HealthResponse)
 def health():
     vector_db_status = "ok"
     try:
         vectorstore = get_vectorstore()
-        collection = vectorstore._collection
-        collection.count()
+        vectorstore.similarity_search("ping", k=1)
     except Exception as error:
-        logger.warning("Chroma health check failed: %s",error)
+        logger.warning("Vector DB health check failed: %s",error)
         vector_db_status = "error"
 
     redis_status = "ok" if ping_redis() else "error"
     gemini_status = "ok" if check_gemini_reachable() else "error"
     chat_provider_status = "ok" if check_chat_provider_reachable() else "error"
-    database_status = "ok" if (settings.database_url and ping_db()) else "error"
+    database_status = "ok" if ping_db() else "error"
 
     all_ok = (vector_db_status == "ok" and redis_status == "ok" and gemini_status == "ok" and chat_provider_status == "ok" and database_status == "ok")
     overall_status = "ok" if all_ok else "degraded"

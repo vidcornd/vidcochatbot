@@ -2,15 +2,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     google_api_key: str
-    chroma_path: str = "./data/chroma"
-    chroma_collection: str = "vidco_17020"
+    vector_collection: str = "vidco_17020"
     embedding_model: str = "models/gemini-embedding-001"
-    chat_model: str = "gemini-2.5-flash"
+    chat_model: str = "gemini-2.5-flash-lite"
     chat_provider: str = "deepseek"
     deepseek_api_key: str = ""
     deepseek_model: str = "deepseek-chat"
     redis_url: str = "redis://localhost:6379/0"
-    database_url: str = ""
+    database_url: str
     widget_api_key: str = ""
     allowed_origins: str = (
         "http://localhost:3000,"

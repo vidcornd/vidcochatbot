@@ -1,14 +1,13 @@
-import hashlib
 import json
+import logging
 from pathlib import Path
 from typing import Any
-import chromadb
-from langchain_chroma import Chroma
+from langchain_postgres import PGVector
 from langchain_core.documents import Document
 from app.concepts.formatter import concept_to_text
 from app.config import settings
 from app.rag.vectorstore import get_embeddings
-import logging
+
 logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -29,7 +28,6 @@ def load_concepts() -> dict[str, dict[str, Any]]:
         raise ValueError("concepts.json must be a JSON object.")
 
     return concepts
-
 
 def validate_optional_list_field(concept_id: str,concept: dict[str, Any],field: str) -> None:
     if field not in concept:
@@ -79,94 +77,44 @@ def validate_concept(concept_id: str, concept: dict[str, Any]) -> None:
 
     validate_distinguish_from(concept_id, concept)
 
-def text_hash(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-def get_raw_collection():
-    client = chromadb.PersistentClient(path=settings.chroma_path)
-    return client.get_or_create_collection(name=CONCEPT_COLLECTION_NAME)
-
-def get_concept_vectorstore() -> Chroma:
+def get_concept_vectorstore() -> PGVector:
     embeddings = get_embeddings()
-    return Chroma(collection_name=CONCEPT_COLLECTION_NAME,embedding_function=embeddings,persist_directory=settings.chroma_path)
-
-def get_existing_concepts() -> dict[str, dict[str, Any]]:
-    collection = get_raw_collection()
-    result = collection.get(where={"type": "concept"},include=["metadatas"])
-
-    existing: dict[str, dict[str, Any]] = {}
-
-    ids = result.get("ids", [])
-    metadatas = result.get("metadatas", [])
-
-    for concept_id, metadata in zip(ids, metadatas):
-        existing[concept_id] = metadata or {}
-    return existing
-
-
-def delete_concepts(ids: list[str]) -> None:
-    if not ids:
-        return
-
-    collection = get_raw_collection()
-    collection.delete(ids=ids)
+    return PGVector(embeddings=embeddings,collection_name=CONCEPT_COLLECTION_NAME,connection=settings.database_url,use_jsonb=True,create_extension=False)
 
 def ingest_concepts() -> None:
     concepts = load_concepts()
-    existing = get_existing_concepts()
-
-    current_ids = set(concepts.keys())
-    existing_ids = set(existing.keys())
-
-    ids_to_delete = sorted(existing_ids - current_ids)
-
-    documents_to_upsert: list[Document] = []
-    ids_to_upsert: list[str] = []
-    unchanged_count = 0
 
     for concept_id, concept in concepts.items():
         validate_concept(concept_id, concept)
 
-        document_text = concept_to_text(concept)
-        document_hash = text_hash(document_text)
+    if not concepts:
+        logger.info("concepts.json boş. Eklenecek kavram yok.")
+        return
 
-        old_metadata = existing.get(concept_id)
-        old_hash = old_metadata.get("content_hash") if old_metadata else None
+    documents: list[Document] = []
+    ids: list[str] = []
 
-        if old_hash == document_hash:
-            unchanged_count += 1
-            continue
-
-        documents_to_upsert.append(
+    for concept_id, concept in concepts.items():
+        documents.append(
             Document(
-                page_content=document_text,
+                page_content=concept_to_text(concept),
                 metadata={
                     "type": "concept",
                     "concept_id": concept_id,
                     "name": concept["name"],
-                    "content_hash": document_hash,
                 },
             )
         )
-        ids_to_upsert.append(concept_id)
+        ids.append(concept_id)
 
-    if ids_to_delete:
-        delete_concepts(ids_to_delete)
+    vectorstore = get_concept_vectorstore()
+    vectorstore.delete(ids=ids)
+    vectorstore.add_documents(documents=documents, ids=ids)
 
-    if ids_to_upsert:
-        delete_concepts(ids_to_upsert)
-
-        vectorstore = get_concept_vectorstore()
-        vectorstore.add_documents(documents=documents_to_upsert,ids=ids_to_upsert)
-
-    logger.info("%d kavram eklendi/güncellendi.",len(ids_to_upsert))
-    logger.info("%d kavram silindi.",len(ids_to_delete))
-    logger.info("%d kavram değişmedi.",unchanged_count)
-
-    if not concepts:
-        logger.info("concepts.json boş. Eklenecek kavram yok.")
+    logger.info("%d kavram (yeniden) yüklendi.",len(ids))
 
 if __name__ == "__main__":
     from app.logging_config import configure_logging
+
     configure_logging()
     ingest_concepts()

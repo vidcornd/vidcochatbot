@@ -1,5 +1,5 @@
 from typing import Any
-from langchain_chroma import Chroma
+from langchain_postgres import PGVector
 from app.config import settings
 from app.rag.vectorstore import get_embeddings
 
@@ -7,7 +7,7 @@ CONCEPT_COLLECTION_NAME = "vidco_concepts"
 
 class ConceptRetriever:
     def __init__(self) -> None:
-        self.vectorstore = Chroma(collection_name=CONCEPT_COLLECTION_NAME,embedding_function=get_embeddings(),persist_directory=settings.chroma_path)
+        self.vectorstore = PGVector(embeddings=get_embeddings(),collection_name=CONCEPT_COLLECTION_NAME,connection=settings.database_url,use_jsonb=True,create_extension=False)
 
     def search(self, query: str, top_k: int = 3) -> list[dict[str, Any]]:
         docs_with_scores = self.vectorstore.similarity_search_with_score(query=query,k=top_k,filter={"type": "concept"})

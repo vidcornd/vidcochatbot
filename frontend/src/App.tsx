@@ -4,10 +4,10 @@ function App() {
   return (
     <main className="demoPage">
       <section className="demoContent">
-        <h1>Vidco 17020 RAG Assistant Demo</h1>
+        <h1>Vidco Dijital Yardım Asistanı — Demo</h1>
         <p>
-          Sağ alttaki chat balonuna tıklayarak Vidco Yardım Asistanı widgetını
-          test edebilirsiniz.
+          Sağ alttaki chat balonuna tıklayarak Vidco Dijital Yardım Asistanı
+          widgetını test edebilirsiniz.
         </p>
       </section>
 

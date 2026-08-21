@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+data/chroma/
+data/ingest_registry.json
+audit_summary.txt
+pdf_quality_report.json

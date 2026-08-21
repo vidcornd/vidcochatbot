@@ -11,7 +11,7 @@ export function ChatWidget() {
       <button
         className="chatBubble"
         onClick={() => setIsOpen((currentValue) => !currentValue)}
-        aria-label="Vidco yardım asistanını aç"
+         aria-label="Vidco Dijital Yardım Asistanı'nı aç"
         type="button"
       >
         <span className="chatBubbleLogoWrap">

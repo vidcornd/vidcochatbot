@@ -116,7 +116,7 @@
 
     var iframe = document.createElement("iframe");
     iframe.id = "vidco-chat-iframe";
-    iframe.title = "Vidco Chatbot";
+    iframe.title = "Vidco Dijital Yardım Asistanı";
     iframe.src = CHAT_HOST + "/embed?session=" + encodeURIComponent(sessionToken);
     iframe.setAttribute("allow", "microphone; clipboard-write");
     Object.assign(iframe.style, { width: "100%", height: "100%", border: "none", background: "transparent" });
