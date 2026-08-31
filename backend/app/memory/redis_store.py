@@ -8,8 +8,13 @@ MessageRole = Literal["user", "assistant"]
 CONVERSATION_TTL_SECONDS = 60 * 60 * 24
 MAX_MESSAGES = 10
 
+_redis_client: redis.Redis | None = None
+
 def get_redis_client():
-    return redis.Redis.from_url(settings.redis_url,decode_responses=True)
+    global _redis_client
+    if _redis_client is None:
+        _redis_client = redis.Redis.from_url(settings.redis_url,decode_responses=True)
+    return _redis_client
 
 def get_summary_key(conversation_id: str) -> str:
     return f"conversation:{conversation_id}:summary"
