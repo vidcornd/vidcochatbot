@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/widget", tags=["widget"])
 
 @router.post("/session", response_model=WidgetSessionResponse)
 def create_widget_session(payload: WidgetSessionRequest):
-    if payload.origin not in settings.allowed_origins_list:
+    if not settings.is_origin_allowed(payload.origin):
         raise api_error(status_code=403,error="origin_not_allowed",message="Bu origin için widget oturumu açılamaz.")
 
     if payload.botId != settings.widget_bot_id:

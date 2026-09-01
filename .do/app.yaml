@@ -41,7 +41,7 @@ services:
       - key: DEEPSEEK_MODEL
         value: "deepseek-chat"
       - key: ALLOWED_ORIGINS
-        value: "https://www.vidco.com.tr"
+        value: "*.voc-tester.com"
 
 static_sites:
   - name: frontend
@@ -53,5 +53,5 @@ static_sites:
       - path: /
     envs:
       - key: VITE_API_URL
-        value: "https://chat.vidco.com.tr"
+        value: "https://chatbot.voc-tester.com"
         scope: BUILD_TIME

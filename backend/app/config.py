@@ -1,4 +1,19 @@
+import re
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+def _wildcard_pattern_to_regex(pattern: str) -> re.Pattern:
+    domain = pattern[2:]
+    escaped_domain = re.escape(domain)
+    return re.compile(rf"^https?://([a-zA-Z0-9-]+\.)*{escaped_domain}$")
+
+def origin_matches_allowed_patterns(origin: str, patterns: list[str]) -> bool:
+    for pattern in patterns:
+        if pattern.startswith("*."):
+            if _wildcard_pattern_to_regex(pattern).match(origin):
+                return True
+        elif origin == pattern:
+            return True
+    return False
 
 class Settings(BaseSettings):
     google_api_key: str
@@ -42,5 +57,21 @@ class Settings(BaseSettings):
             )
 
         return cleaned_origins
+
+    @property
+    def exact_allowed_origins(self) -> list[str]:
+        return [origin for origin in self.allowed_origins_list if not origin.startswith("*.")]
+
+    @property
+    def wildcard_allowed_origin_regex(self) -> str | None:
+        wildcard_patterns = [origin for origin in self.allowed_origins_list if origin.startswith("*.")]
+        if not wildcard_patterns:
+            return None
+
+        sub_patterns = [_wildcard_pattern_to_regex(pattern).pattern for pattern in wildcard_patterns]
+        return "|".join(f"(?:{sub_pattern})" for sub_pattern in sub_patterns)
+
+    def is_origin_allowed(self, origin: str) -> bool:
+        return origin_matches_allowed_patterns(origin, self.allowed_origins_list)
 
 settings = Settings()
