@@ -1,0 +1,40 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      # Settings has no defaults for these two. Nothing in the suite reaches a
+      # real service, so placeholders are enough.
+      GOOGLE_API_KEY: dummy
+      DATABASE_URL: postgresql://user:pass@localhost:5432/dummy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          # Matches backend/Dockerfile, so CI installs what production installs.
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Import the app
+        # A missing dependency reached production once because it happened to be
+        # installed on the developer machine. Importing here against a clean
+        # install is what catches that class of bug.
+        run: python -c "import app.main"
+
+      - name: Run tests
+        run: python -m pytest -q
