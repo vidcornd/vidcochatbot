@@ -13,7 +13,7 @@ def calculate_confidence(chunks: list[dict]) -> str:
     if not chunks:
         return "low"
     
-    best_score = chunks[0]["score"]
+    best_score = min(chunk["score"] for chunk in chunks)
     if best_score <= 0.45:
         return "high"
     if best_score <= 0.70:

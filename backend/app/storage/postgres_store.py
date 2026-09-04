@@ -36,15 +36,6 @@ def init_db() -> None:
                 )
             """)
             cur.execute("""
-                CREATE TABLE IF NOT EXISTS messages (
-                    id SERIAL PRIMARY KEY,
-                    conversation_id TEXT NOT NULL,
-                    role TEXT NOT NULL,
-                    content TEXT NOT NULL,
-                    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-                )
-            """)
-            cur.execute("""
                 CREATE INDEX IF NOT EXISTS idx_messages_conversation_id
                 ON messages (conversation_id)
             """)

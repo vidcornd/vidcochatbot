@@ -12,10 +12,10 @@ def detect_metadata_filter(question: str) -> dict | None:
         return None
 
     if has_android:
-        return {"doc_id": "mobil_android"}
+        return {"doc_id": "mobil-android"}
 
     if has_apple:
-        return {"doc_id": "mobil_apple"}
+        return {"doc_id": "mobil-apple"}
 
     return None
 
